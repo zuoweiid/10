@@ -223,11 +223,11 @@ jobs:
         # git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot                # PushBot 全能推送，改名后
         # git clone https://github.com/immortalwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic          # 下载新版网易云解锁
         
-       #  git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon        # 下载新版Argon主题
-       #  git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config           # 下载新版Argon主题设置
+        # git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon        # 下载新版Argon主题
+        # git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config           # 下载新版Argon主题设置
         # git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus     # 京东签到
-       # git clone https://github.com/jenson85/luci-theme-darkmatter.git package/luci-theme-darkmatter        # 下载darkmatter黑暗主题
-       # git clone https://github.com/rosywrt/luci.git package/luci-rosy                                      # rosy玫瑰红主题
+        # git clone https://github.com/jenson85/luci-theme-darkmatter.git package/luci-theme-darkmatter        # 下载darkmatter黑暗主题
+        # git clone https://github.com/rosywrt/luci.git package/luci-rosy                                      # rosy玫瑰红主题
         #git clone https://github.com/project-openwrt/openwrt-tmate.git package/luci-openwrt-tmate            # 不知名主题
         # git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-theme-atmaterial     # 经典主题
         #git clone --depth=1 -b openwrt-18.06 https://github.com/rosywrt/luci-theme-rosy                      # rosy玫瑰红主题
