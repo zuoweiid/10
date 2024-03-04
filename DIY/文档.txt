@@ -1,0 +1,76 @@
+﻿https://github.com/coolsnowwolf/lede.git                        # Lede-Lean源码
+https://github.com/Lienol/openwrt.git                             # Package-Lienol源码
+https://github.com/immortalwrt/immortalwrt                  # OpenWrt-CTCGFW源码
+----------------------------------------------------------------------------------
+https://github.com/P3TERX/Actions-OpenWrt.git             # P3terx云编译
+
+https://github.com/garypang13/Actions-OpenWrt           # garypang13云编译
+https://github.com/Hyy2001X/AutoBuild-Actions             # Hyy2001X云编译
+https://github.com/Hyy2001X/Openwrt-AutoUpdate       # Hyy2001X云编译-自动升级 AutoBuild 固件
+
+主题少
+Bootstrap
+ATMaterial——brown
+Material
+ATMaterial——red
+ATMaterial
+空闲66.8M
+
+
+固件分为三个版本，Lean 版，Offical 版，Project 版
+
+Lean 为基于 Lean 大源码 编译的固件 (Luci 采用 Lean 版 Luci 18.06 )；
+
+Offical 为基于 OpenWrt 官方源码 Master 分支编译的固件 (Luci 采用官方版 Luci 19.07)；
+
+Project 为基于 Project-OpenWrt 源码 18.06-kernel5.4 分支编译的固件，(Luci 采用 Lean 版 Luci 18.06 )，目前 Project 版仅支持竞斗云。
+
+ext4固件 适合熟悉Linux 系统可调整分区大小
+rootfs
+squashfs固件 适合不折腾用户，可以恢复出厂设置    # SSH连接，输入命令：firstboot-->>yes-->>reboot -f ;重启后恢复出厂设置
+factory 固件 为全新安装系统，
+sysupgrade固件 为升级系统，无需解压 可直接在 Luci 面板中升级，
+----------------------------------
+openwrt-x86-64-generic-squashfs-combined.img 或.gz       ------带引导分区文件，也就是刷完后可以直接启动无需做设置，推荐使用！
+openwrt-x86-64-generic-squashfs-combined.vmdk             ------带引导分区的虚拟机Vmware文件，VM WorkStation直接选择磁盘后可直接启动无需再单独设置（注意：非ESXI文件，ESXI建议使用(1)转换后使用）。
+openwrt-x86-64-rootfs-squashfs.img或.gz	分区文件，           ------刷此文件，只是把系统刷到了分区（分区格式需为Ext4），需要单独设置grub或者syslinux来进行引导。
+openwrt-x86-64-generic-squashfs-combined-efi.img或.gz   ------带UEFI固件为支持efi启动，原理同（1）的说明。
+openwrt-x86-64-generic-ext4-combined.img 或.gz	           ------为Ext4分区文件，可作为升级使用直接写入到分区即可。efi.img同理
+openwrt-x86-64-combined-squashfs.iso	                           ------系统镜像文件，可以使用ultraiso或类似工具直接写入到磁盘即可，efi 文件同理。
+-------------------------------------
+此固件为128m，请使用1.0.9以上的Opboot刷入。
+opboot-1.0.9以上版本正式支持nand 128M 全分区，从旧版升级到1.0.9的机友请自觉重新刷机（刷机文件请选择xxx.ubi，因为需要重建整个UBI分区，之后刷“ubi”或者“bin”均可），否则无法启动，如果想使用64M版本固件，请自觉降级到opboot-1.0.8。
+
+
+对于自己编译固件，自己使用的情况来说，采取web界面升级的办法偶尔会有失败的时候，只能重新刷，再去将以前的配置重新做一次，比如pppoe，动态DNS，IP地址绑定等等。最近折腾固件翻看openwrt的官方文档，发现一个办法，可以免折腾，目前看来还是不错的！
+一、固件配置备份：先将目前再用的固件配置文件做备份，备份后文件格式为 日期.tar；
+二、解压缩上述备份文件，得到两个文件夹  /etc  和 /usr
+三、在openwrt的build_dir文件夹下建立一个文件夹  files
+四、将解压出来的两个文件夹拷贝到files下；
+  后面就省心了，下次重新编译固件以后，刷固件，里面的配置跟以前使用的固件一样，不用再折腾了。
+  不知道还有没有其他更简单的方法！
+
+
+想选择luci-app-samba4，首先在Extra packages ---> 把autosamba取消，在选择插件的那里把luci-app-samba取消，然后在Network ---> 把 samba36-server取消，最后选择luci-app-samba4
+
+
+
+自定义密码
+sed -i 's/root【::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999:7】:::/g' /etc/shadow
+root开头    :0:99999:7:::  换成你在shadow文件里面的完整密码就可以了
+
+
+K3的固件
+CONFIG_TARGET_bcm53xx=y
+CONFIG_TARGET_bcm53xx_DEVICE_phicomm-k3=y
+CONFIG_TARGET_BOARD="bcm53xx"
+
+Acrh17的固件
+CONFIG_TARGET_ipq40xx=y
+CONFIG_TARGET_ipq40xx_DEVICE_asus_rt-acrh17=y
+CONFIG_TARGET_BOARD="ipq40xx"
+
+TP-6300的固件 (与水星1200一致)
+Arheros AR7xxx/AR9xxx
+Generic
+Defult Profile(alldrivers)

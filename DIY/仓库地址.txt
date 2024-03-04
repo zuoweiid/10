@@ -1,0 +1,90 @@
+git@github.com:zuoweiid/10.git       #测试功能
+git@github.com:zuoweiid/10-xy.git  #稳定功能
+--------------------------------------------------
+git@github.com:zuoweiid/51.git      #可照抄
+git@github.com:zuoweiid/52.git      #照抄测试
+--------------------------------------------------
+git@github.com:zuoweiid/Tb.git
+
+git@github.com:zuoweiid/60.git     #参考的 ，可运行 看不懂
+git@github.com:zuoweiid/50-x.git   #参考的，不能运行
+
+git@github.com:zuoweiid/OpenWrt.git
+--------------------------------------------------
+维护的仓库：
+https://github.com/danshui-git/Build-OpenWrt     # 主要学习
+https://github.com/luixiao0/build-openwrt            #
+https://github.com/gd0772/AutoBuild-OpenWrt    # 
+https://github.com/tuanqing/mknop                     # tuanqing-N1在线打包
+https://github.com/sean-liang/PHICOMM-N1-OpenWRT-Image-Builder    # N1在线打包
+
+https://github.com/IvanSolis1989/OpenWrt-DIY     # 已查看，机型多
+https://github.com/IVANSOLIS0414/OpenWrt-DIY    # 已查看，机型多
+https://github.com/MrH723/Actions-OpenWrt           # 已查看，机型多
+https://github.com/garypang13/OpenWrt                # 参考 太复杂
+https://github.com/SuLingGG/OpenWrt-Rpi            # 参考 太复杂
+https://github.com/hibuddies/openwrt                   # 参考 太复杂
+
+https://github.com/Draco-china/OpenWrt-Actions-LeanAndSnapshot   # 已查看
+https://github.com/kanshudeshanzhu/OpenWrt-ziyong  # 已查看
+https://github.com/Netflixxp/op-                                    # 已查看
+
+---
+
+https://github.com/leopardciaw
+
+https://github.com/HuaZhuangNan/actions-build-padavan-openwrt
+https://github.com/romantices/GDOCK-passwall
+https://github.com/Cathgao/GDOCK-Cath
+https://github.com/seyrenus/Lede-OpenWrt/blob/master/diy-lede.sh
+https://github.com/RicardoKlose/wrt32x_lede/actions/workflows/build-openwrt.yml
+https://github.com/RicardoKlose/wrt32x_lede/actions/runs/802788388
+https://github.com/allenrong88/Openwrt-WRT32X-19.07.3/actions/workflows/build-openwrt.yml
+
+
+https://github.com/OpenWrt-Actions/R7800
+https://github.com/ClayMoreBoy/OpenWrt-Actions-R7800
+https://mlapp.cn/369.html
+https://github.com/zhb7670?tab=repositories
+https://github.com/WangWenBin2017/OpenWrt-SSRPLUS
+
+https://github.com/vison-v/OpenWrt
+https://github.com/nanchuci/E8820S-OpenWrt
+
+https://github.com/AndroidDeals/AutoBuild-OpenWRT
+
+https://github.com/tjuyy/Phicomm-K2P-Openwrt-Autobuild
+https://github.com/esirplayground/AutoBuild-OpenWrt
+https://destan19.github.io/
+
+
+Fork的
+https://github.com/lylus/luci-app-autoupdate
+
+https://github.com/anran-world/Anranawsl
+https://github.com/xiaoankaoyan/we-have-a-dream
+--------------------------------------------------
+插件的仓库：
+
+LuCI Applications 插件说明
+https://github.com/IvanSolis1989/OpenWrt-DIY/wiki/Lean%E2%80%98s-OpenWrt-%E2%80%94%E2%80%94LuCI-Applications-%E6%8F%92%E4%BB%B6%E8%AF%B4%E6%98%8E
+
+https://github.com/immortalwrt/luci-app-unblockneteasemusic   解锁网易云
+https://github.com/rufengsuixing/luci-app-adguardhome   
+
+主题
+https://github.com/garypang13/luci-theme-edge        # Edge 带背景音乐
+
+
+同步分叉
+https://github.com/TobKed/github-forks-sync-action
+
+
+--------------------------------------------------
+
+当前运行的：
+
+
+# 82   云编译 Argon主题+另外默认主题   无插件   镜像有内存
+ # 83 云编译 第三项配置不一样 无插件 默认主题
+
