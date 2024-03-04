@@ -50,7 +50,7 @@ env:
 #-----------------------------------------------------------------------------------------------------------------
 # # 单机型_各项配置开关
   # FIRMWARE_NAME: OpenWRT_x86                                      #微信推送变量名（固件名称不能含中文）
-  # GITHUB_RELEASE: https://github.com/zuoweiid/13.1/releases       #GitHub发布地址，修改成自己的
+  # GITHUB_RELEASE: https://github.com/zuoweiid/10/releases       #GitHub发布地址，修改成自己的
   # REPO_URL: https://github.com/coolsnowwolf/lede                  #OpenWRT源码地址
   # REPO_BRANCH: master             #←源码分支
   # FEEDS_CONF: feeds.conf.default  #自定义feeds文件
@@ -92,7 +92,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [lede_hiwifi_HC5861]   #←目标指定机型文件夹，可以多选用英文逗号隔开
+        target: [lede_x86]   #←目标指定机型文件夹，可以多选用英文逗号隔开
         # openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
 #-----------------------------------------------------------------------------------------------------------------
     steps:
