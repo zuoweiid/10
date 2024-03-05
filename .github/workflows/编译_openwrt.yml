@@ -10,22 +10,22 @@
 #-----------------------------------------------------------------------------------------------------------------
 #←↑→↓↖↙↗↘↕箭头符号
 
-name: 编译OpenWRT固件 #👈工作流名称
+name: 编译OpenWRT固件 #👈 Actions工作流名称
 on:
   workflow_dispatch:
     inputs:
       ssh:
         description: 'SSH远程'
         required: false
-        default: 'true-false' # true=开启 false=关闭
+        default: 'true-false' # 输入：true=开启 false=关闭
       wxtz:
         description: '微信通知'
         required: false
-        default: 'wxtz'  # wxtz=开启 false=关闭
+        default: 'wxtz'       # 输入：wxtz=开启 false=关闭
       release:
         description: '发布固件'
         required: false
-        default: 'release'  # release=开启 actions=关闭
+        default: 'release'    # 输入：release=开启 actions=关闭
 
 #定时触发开始编译(时间设置请看定时编译说明)
 #  schedule:
@@ -77,23 +77,23 @@ env:
   TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}      # TG电报群令牌
   TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}  # TG电报群密钥
 
-  Author: ${{github.actor}}                             # 提取 注册ID，如：zuoweiid
-  GITURL: https://github.com/${{github.repository}}     # 提取 仓库地址 = 网址+（注册ID + 仓库名字），如：zuoweiid/10
-  Run_number: ${{github.run_number}}                    # 提取运行编号，如#12
+  Author: ${{github.actor}}                             # 提取 Github用户ID，如：zuoweiid
+  GITURL: https://github.com/${{github.repository}}     # 提取 项目仓库地址 = https://github.com +（用户ID + 项目仓库名字），如：zuoweiid/10
+  Run_number: ${{github.run_number}}                    # 提取 Actions当前运行编号，如#12
   
 #-----------------------------------------------------------------------------------------------------------------
 jobs:
   build:
-    runs-on: Ubuntu-20.04   #←编译系统版本
-    if: github.event.repository.owner.id == github.event.sender.id  #只有仓库所有者才能点 Star启动
+    runs-on: Ubuntu-20.04   #←选择编译系统版本
+    if: github.event.repository.owner.id == github.event.sender.id  #只有仓库所有者才能使用  “点 Star启动编译”
 #-----------------------------------------------------------------------------------------------------------------
 # 多机型_增加选项
-    name: 编译 ${{matrix.target}}
+    name: 编译 ${{matrix.target}}      # “编译” 后面是选择编译的机型名称；如：
     strategy:
       fail-fast: false
       matrix:
-        target: [lede_x86]   #←目标指定机型文件夹，可以多选用英文逗号隔开
-        # openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
+        target: [lede_x86]   #←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
+        # 目前可以选机型：openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
 #-----------------------------------------------------------------------------------------------------------------
     steps:
     - name: 准备环境 #Checkout
@@ -117,24 +117,24 @@ jobs:
 #SERVERCHAN_SCKEY="false"            #微信通知（true=开启）（false=关闭）
 
 #-----------------------------------------------------------------------------------------------------------------
-    - name: 加载脚本 #编译前加载脚本
+    - name: 加载settings.ini脚本 #编译前加载脚本
       run: |
-        source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"
-        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
-        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
-        echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV
-        echo "DIY_P1_SH=${DIY_P1_SH}" >> $GITHUB_ENV
-        echo "DIY_P2_SH=${DIY_P2_SH}" >> $GITHUB_ENV
-        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
-        echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV
-        echo "UPLOAD_CONFIG=${UPLOAD_CONFIG}" >> $GITHUB_ENV
-        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
-        echo "UPLOAD_COWTRANSFER=${UPLOAD_COWTRANSFER}" >> $GITHUB_ENV
-        echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV
-        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
-        echo "SERVERCHAN_SCKEY=${SERVERCHAN_SCKEY}" >> $GITHUB_ENV
+        source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"               # 加载配置文件：/项目仓库名称/build/机型文件/settings.ini（每个机型文件夹内都有这个配置文件）
+        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV                                       # = 固件源码地址
+        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV                                 # = 固件源码的分支
+        echo "CONFIG_FILE=${CONFIG_FILE}" >> $GITHUB_ENV                                 # = .config配置文件
+        echo "DIY_P1_SH=${DIY_P1_SH}" >> $GITHUB_ENV                                     # = DIY_P1_SH的变量
+        echo "DIY_P2_SH=${DIY_P2_SH}" >> $GITHUB_ENV                                     # = DIY_P2_SH的变量
+        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV                                 # = SSH远程的变量
+        echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV                           # = 是否 上传都github空间的变量
+        echo "UPLOAD_CONFIG=${UPLOAD_CONFIG}" >> $GITHUB_ENV                             # = 是否 将“.config配置文件” 上传到github空间的变量
+        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV                         # = 是否 将“编译好的固件” 上传到github空间的变量
+        echo "UPLOAD_COWTRANSFER=${UPLOAD_COWTRANSFER}" >> $GITHUB_ENV                   # = 是否 将“编译好的固件” 上传到奶牛快传的变量
+        echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV                     # = 是否 将“编译好的固件” 上传到“WETRANSFER网盘”的变量
+        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV                           # = 是否 将“编译好的固件” 发布到仓库中
+        echo "SERVERCHAN_SCKEY=${SERVERCHAN_SCKEY}" >> $GITHUB_ENV                       # = 是否 开启微信通知的变量
         
-        echo "CangKu=${GITURL##*${Author}/}" >> $GITHUB_ENV     # 变量=仓库的名称
+        echo "CangKu=${GITURL##*${Author}/}" >> $GITHUB_ENV                              # = 提取当前项目仓库的名称 变量
 #-----------------------------------------------------------------------------------------------------------------
     - name: 准备编译_微信通知         #Github设置里需添微信SCKEY
       uses: emon100/Action-Serverchan@v2
@@ -155,7 +155,7 @@ jobs:
               
 
 #-----------------------------------------------------------------------------------------------------------------
-    - name: 初始化环境 #Initialization environment
+    - name: 安装编译环境 #Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -176,41 +176,47 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
-        cd openwrt
+        cd openwrt                                                                      # 进入源码 执行目录“openwrt”
         
-        # if [ ${{matrix.target}} != openwrt ]; then
+        # if [ ${{matrix.target}} != openwrt ]; then                                    # 当编译“openwrt”纯净机型时，先删除这些文件夹
           # rm -rf package/lienol/luci-app-timecontrol
           # rm -rf package/ntlf9t/{smartdns,luci-app-smartdns}
           # rm -rf package/ctcgfw/{luci-app-argon-config,luci-theme-argonv3}
           # rm -rf package/lean/{luci-app-netdata,luci-theme-argon,k3screenctrl}
-        # fi   # 编译“openwrt”纯净机型时，删除这4个文件夹
+        # fi
         
-        rm -rf package/lean/luci-app-unblockmusic  # lede源码中 删除_旧版插件： 网易云解锁
-        rm -rf package/lean/UnblockNeteaseMusic    #                             网易云解锁
-        rm -rf package/lean/UnblockNeteaseMusicGo  #                             网易云解锁
+        rm -rf {LICENSE,README,README.md}
+        rm -rf ./*/{LICENSE,README,README.md}
+        rm -rf ./*/*/{LICENSE,README,README.md}    # 删除无用说明
+
+    - name: 更新 & 插件源 #Update feeds & Install feeds
+      run: |
+        cd openwrt                                                                    # 进入源码 执行目录“openwrt”
         
-        rm -rf package/lean/luci-theme-argon       # lede源码中 删除_旧版主题： Argon主题
-        rm -rf package/lean/luci-theme-netgear     #                             netgear主题
+        sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default          # 适合一键下载编译（smpackage目录）
         
-        rm -rf package/lean/luci-app-docker        # lede源码中 删除_旧版docker
+        ./scripts/feeds clean                                                         # 清除编译临时文件
+        ./scripts/feeds update -a                                                     # 更新插件源
+
+
 #-----------------------------------------------------------------------------------------------------------------
     - name: 加载DIY_1脚本 #Load custom feeds
       run: |
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then
+        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
           git clone https://github.com/tuanqing/mknop reform
-        fi   # N1机型时_下载在线打包依赖（在根目录）
+        fi
         
-        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt  # 源码文件复制到对应机型目录下
+        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt               # 复制源码文件到对应机型目录下
         
-        cd openwrt
-        if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then
+        cd openwrt                                                                                  # 进入源码 执行目录“openwrt”
+        if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then                # 执行DIY_1脚本！！！
           chmod +x build/${{matrix.target}}/$DIY_P1_SH
           /bin/bash "build/${{matrix.target}}/$DIY_P1_SH"
-        fi   # 执行DIY_1脚本
+        fi
         
-        # if [ ${{matrix.target}} != "openwrt" ]; then
+        # if [ ${{matrix.target}} != "openwrt" ]; then                       # 当编译“openwrt”纯净机型时，下载openwrt-package插件包
           # git clone -b $REPO_BRANCH --single-branch https://github.com/281677160/openwrt-package package/danshui
-        # fi   # 编译“openwrt”纯净机型时
+        # fi
         
         # git clone https://github.com/tuanqing/install-program package/install-program                  # 下载N1写入包（编译前勾选：Utilities--> install-program）
         # git clone https://github.com/Hyy2001X/luci-app-autoupdate package/luci-app-autoupdate          # 在线更新固件插件
@@ -267,57 +273,47 @@ jobs:
 # sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
 # popd
 #-----------------------------------------------------------------------------------------------------------------
-    - name: 更新源 & 安装源 #Update feeds & Install feeds
-      run: cd openwrt && ./scripts/feeds clean
-           cd openwrt && ./scripts/feeds update -a
-           cd openwrt && ./scripts/feeds install -a
 
 #-----------------------------------------------------------------------------------------------------------------
     - name: 加载DIY_2脚本 #Load custom configuration
       run: |
-        cd openwrt
-        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then
+        cd openwrt                                                                                 # 进入源码 执行目录“openwrt”
+        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
           chmod +x build/${{matrix.target}}/$DIY_P2_SH
           /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        fi   # 执行DIY_2脚本
+        fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then
+        if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then                      # 复制 编译机型目录内的“diy”文件到openwrt源码内
          cp -Rf build/${{matrix.target}}/diy/* ./
-        fi   # 拷贝diy文件内容
+        fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/files" 2>/dev/null)" ]; then
+        if [ -n "$(ls -A "build/${{matrix.target}}/files" 2>/dev/null)" ]; then                    # 复制 编译机型目录内的“files”文件到openwrt源码内
          cp -rf build/${{matrix.target}}/files files
          chmod -R 777 build/${{matrix.target}}/files/* ./
-        fi   # 拷贝files文件内容
+        fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/patches" 2>/dev/null)" ]; then
+        if [ -n "$(ls -A "build/${{matrix.target}}/patches" 2>/dev/null)" ]; then                  # 复制 编译机型目录内的“patches”文件到openwrt源码内
           find "build/${{matrix.target}}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 --forward --no-backup-if-mismatch"
-        fi   # 拷贝patches文件内容
+        fi
         
-        [ -e build/${{matrix.target}}/$CONFIG_FILE ]
-        mv build/${{matrix.target}}/$CONFIG_FILE .config   # 移动.config文件到对应机型目录下
+        [ -e build/${{matrix.target}}/$CONFIG_FILE ]                                               # 移动 编译机型目录内的“.config”文件到openwrt源码内
+        mv build/${{matrix.target}}/$CONFIG_FILE .config
         
-        if [ $REPO_URL == "https://github.com/coolsnowwolf/lede" ]; then
+        if [ $REPO_URL == "https://github.com/coolsnowwolf/lede" ]; then                           # 当使用Lede源码时，变量：NAME2=Lede   ZUOZHE=lean
          echo "NAME2=Lede_" >> $GITHUB_ENV
          echo "ZUOZHE=lean" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/Lienol/openwrt" ]; then
+        elif [ $REPO_URL == "https://github.com/Lienol/openwrt" ]; then                            # 当使用Lienol源码时 变量：NAME2=Lienol   ZUOZHE=lienol
          echo "NAME2=Lienol_" >> $GITHUB_ENV
          echo "ZUOZHE=lienol" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/project-openwrt/openwrt" ]; then
+        elif [ $REPO_URL == "https://github.com/project-openwrt/openwrt" ]; then                   # 当使用Project源码时 变量：NAME2=Project   ZUOZHE=CTCGFW
          echo "NAME2=Project_" >> $GITHUB_ENV
          echo "ZUOZHE=CTCGFW" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/openwrt/openwrt" ]; then   # NAME2 = 源码作者信息
+        elif [ $REPO_URL == "https://github.com/openwrt/openwrt" ]; then                           # 当使用官方源码时 变量：NAME2=Official
          echo "NAME2=Official_" >> $GITHUB_ENV
         fi
         
-        rm -rf feeds/kenzok/luci-theme-opentomato   # feeds目录中删除_旧版主题： opentomato主题
-        rm -rf feeds/kenzok/luci-theme-opentomcat   #                             opentomcat主题
-        rm -rf feeds/kenzok/luci-theme-opentopd     #                             opentopd主题
-        rm -rf feeds/kenzok/luci-theme-argon_new    #                             argon主题（kenzok整理的） 
         
-        rm -rf {LICENSE,README,README.md}
-        rm -rf ./*/{LICENSE,README,README.md}
-        rm -rf ./*/*/{LICENSE,README,README.md}    # 删除无用说明
+
 #-----------------------------------------------------------------------------------------------------------------
     # - name: Apply patches #patch补丁
       # run: |
@@ -350,23 +346,23 @@ jobs:
         make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s
         echo "::set-output name=status::success"
         
-        DEVICE=$(egrep -o "CONFIG_TARGET.*DEVICE.*=y" .config | sed -r 's/.*(.*)=y/\0/')       # DEVICE 变量 = 固件机型（.config文件内求出）
-        DEVICE2=$(egrep -o "CONFIG_TARGET.*_64_Generic=y" .config | sed -r 's/.*(.*)=y/\0/')   # DEVICE2 变量 = 固件平台（.config文件内求出）
+        DEVICE=$(egrep -o "CONFIG_TARGET.*DEVICE.*=y" .config | sed -r 's/.*(.*)=y/\0/')            # DEVICE  = 固件机型的变量（在.config配置文件中得出）
+        DEVICE2=$(egrep -o "CONFIG_TARGET.*_64_Generic=y" .config | sed -r 's/.*(.*)=y/\0/')        # DEVICE2 = 固件平台的变量（在.config配置文件中得出）如：X86、
         
-        if [ $DEVICE == "CONFIG_TARGET_x86_64_DEVICE_generic=y" ]; then   # 小写generic = DEVICE 变量 /= NAME1 （固件平台“x86-64”）
+        if [ $DEVICE == "CONFIG_TARGET_x86_64_DEVICE_generic=y" ]; then                             # 当固件机型含generic时，输出变量=      小写generic = DEVICE 变量 /= NAME1 （固件平台“x86-64”）
          echo "NAME1=x86-64" >> $GITHUB_ENV
-        elif [ $DEVICE2 == "CONFIG_TARGET_x86_64_Generic=y" ]; then       # 大写Generic= DEVICE2 变量 /= NAME1 （固件平台“x86-64”）
+        elif [ $DEVICE2 == "CONFIG_TARGET_x86_64_Generic=y" ]; then                                 # 当固件机型含Generic时，输出变量=      大写Generic= DEVICE2 变量 /= NAME1 （固件平台“x86-64”）
          echo "NAME1=x86-64" >> $GITHUB_ENV
-        elif [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then   # N1的执行判断 / NAME1 = “n1,Vplus,Beikeyun,L1Pro,S9xxx”
+        elif [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then         # 当编译N1机型目录时，输出变量=          N1的执行判断 / NAME1 = “n1,Vplus,Beikeyun,L1Pro,S9xxx”
          echo "NAME1=n1,Vplus,Beikeyun,L1Pro,S9xxx" >> $GITHUB_ENV
-        elif [ $DEVICE != "CONFIG_TARGET_x86_64_DEVICE_generic=y" ]; then                     # 没有“x86-64”时 = NAME1 /= “DEVICE_”字符后名称（如竞斗云：p2w_r619ac-128m）
+        elif [ $DEVICE != "CONFIG_TARGET_x86_64_DEVICE_generic=y" ]; then                           # 没有“x86-64”时 = NAME1 /= “DEVICE_”字符后名称（如竞斗云：p2w_r619ac-128m）
          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > NAME1
          [ -s NAME1 ] && echo "NAME1=$(cat NAME1)" >> $GITHUB_ENV
-        fi   # NAME1 = x86-64（与DEVICE_NAME变量对等=提取是“generic”）
+        fi                                                                                          # NAME1 = x86-64（与DEVICE_NAME变量对等=提取是“generic”）
         
-        echo "date=$(date "+%Y.%m.%d-%H%M")" >> $GITHUB_ENV             # date 变量 =时间格式: 2021.01.02-1310
-        echo "date1=$(date "+%Y年%m月%d号-%H点%M分")" >> $GITHUB_ENV   # date1 变量 =时间格式: 2021年01月02号-13点10分 （Releases主页显示）
-        echo "date2=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_ENV            # date2 变量 =时间格式：2021.01.02-1310（与FILE_DATE对等）Tags显示
+        echo "date=$(date "+%Y.%m.%d-%H%M")" >> $GITHUB_ENV                     # = date 变量时间格式: 2021.01.02-1310
+        echo "date1=$(date "+%Y年%m月%d号-%H点%M分")" >> $GITHUB_ENV           # = date1 变量时间格式: 2021年01月02号-13点10分 （Releases主页显示）
+        echo "date2=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_ENV                    # = date2 变量时间格式：2021.01.02-1310（与FILE_DATE对等）Tags显示
 
 #-----------------------------------------------------------------------------------------------------------------
     - name: 检查空间使用情况 #Check space usage
@@ -377,17 +373,17 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: Bin_${{ env.NAME2 }}${{ env.NAME1 }}_${{ env.date }}   # 文件名称
+        name: Bin_${{ env.NAME2 }}${{ env.NAME1 }}_${{ env.date }}     # 文件名称
         path: openwrt/bin   # 文件路径
 
 #-----------------------------------------------------------------------------------------------------------------
     - name: 编译N1机型时,打包（N1、微加云、贝壳云、我家云、S9xxx）固件
       run: |
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then
-         cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt   # 复制N1固件到打包目录下
+        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
+         cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt
         
          cd reform
-         sudo ./gen_openwrt -d -k latest   # 执行N1打包脚本
+         sudo ./gen_openwrt -d -k latest                                                              # 进入打包目录内，然后执行N1打包脚本
          
          devices=("phicomm-n1" "rk3328" "s9xxx" "vplus")
          cd out
@@ -399,29 +395,31 @@ jobs:
            echo "firmware_$x=$filename" >> $GITHUB_ENV
          done
            cd ../../
-           mv -f reform/out/*/*.img.gz openwrt/bin/targets/armvirt/*   # 移动固件到默认bin目录下
+           mv -f reform/out/*/*.img.gz openwrt/bin/targets/armvirt/*                                  # 移动N1机型固件到默认bin目录下
         fi
 #-----------------------------------------------------------------------------------------------------------------
     - name: 整理文件 #Organize files
       id: organizer
       run: |
-        mkdir config   # 创建config文件夹
-        find openwrt/bin/targets/ -name "*config.buildinfo*" | xargs -i mv -f {} config   # 寻找“config.buildinfo”文件移动并改名为"config"
+        mkdir config                                                                                  # 创建config文件夹
+        find openwrt/bin/targets/ -name "*config.buildinfo*" | xargs -i mv -f {} config               # 寻找“config.buildinfo”文件移动并改名为"config"
         
-        if [ -n "$(ls -A "openwrt/bin/targets/x86" 2>/dev/null)" ]; then
+        if [ -n "$(ls -A "openwrt/bin/targets/x86" 2>/dev/null)" ]; then                              # 寻找“kernel”文件
          find openwrt/bin/targets/x86/* -name "*kernel*" | xargs -i mv -f {} openwrt/bin/targets
         fi
-        cd openwrt/bin/targets/*/*   # 切换到固件目录下
-        rm -rf packages && mkdir packages   # 删除“packages”文件夹，重新创建“packages”文件夹
-        find -name "*buildinfo*" | xargs -i mv -f {} packages
-        find -name "*sha256sums*" | xargs -i mv -f {} packages
-        find -name "*manifest*" | xargs -i mv -f {} packages
-        find -name "*vmlinuz*" | xargs -i mv -f {} packages
-        find -name "*Image*" | xargs -i mv -f {} packages
-        rm -rf packages   # 删除“packages”文件夹
         
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV   # FIRMWARE = 设置变量
-        echo "::set-output name=status::success"   # 列出文件夹内 所有名称
+        cd openwrt/bin/targets/*/*                                                                     # 切换到固件目录下
+        
+        rm -rf packages && mkdir packages                                                              # 删除“packages”文件夹，重新创建“packages”文件夹（把这个文件目录做为放固件的跳板）
+        find -name "*buildinfo*" | xargs -i mv -f {} packages                                          # 寻找“buildinfo”并移动至重建的“packages”文件夹内
+        find -name "*sha256sums*" | xargs -i mv -f {} packages                                         # 寻找“sha256sums”并移动至重建的“packages”文件夹内
+        find -name "*manifest*" | xargs -i mv -f {} packages                                           # 寻找“manifest”并移动至重建的“packages”文件夹内
+        find -name "*vmlinuz*" | xargs -i mv -f {} packages                                            # 寻找“vmlinuz”并移动至重建的“packages”文件夹内
+        find -name "*Image*" | xargs -i mv -f {} packages                                              # 寻找“Image”并移动至重建的“packages”文件夹内
+        rm -rf packages                                                                                # 删除“packages”文件夹
+        
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV                                                            # =FIRMWARE的变量（当前的目录路径）
+        echo "::set-output name=status::success"                                                       # 列出文件夹内 所有名称
 #-----------------------------------------------------------------------------------------------------------------
     - name: 上传.config配置文件  #到github空间
       uses: actions/upload-artifact@v2
