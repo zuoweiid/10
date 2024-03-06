@@ -33,8 +33,8 @@ on:
 #    - cron: 0 8 */5 * *
 
 
-  watch:                           ## 点☆Star触发开始编译
-    types: started
+#  watch:                           ## 点☆Star触发开始编译
+#    types: started
 
 
 #  push:                            ## 编辑任意（或指定文件）触发编译
@@ -452,7 +452,7 @@ jobs:
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_CONFIG == 'true' && !cancelled()
       with:
         name: .config_${{ env.NAME2 }}${{ env.NAME1 }}
-        path: config/.config
+        path: config/config              # config/.config 第20次
 
 
 
