@@ -15,12 +15,21 @@
 # sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default      # PPTP VPN 服务器等。。。
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default # 适合一键下载编译（smpackage目录）
 # --------------------单独添加插件部分--------------------
+sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default          # 适合一键下载编译（smpackage目录）
+
+./scripts/feeds clean                                                         # 清除编译临时文件
+./scripts/feeds update -a                                                     # 更新插件源
 
 
 #----------------------------------------------删除 LEDE源码内luci自带插件----------------------------------------------
 
 cd feeds/luci/applications           # 进入 LEDE源码内applications目录内；
 echo "***目录applications插件安装后路径：/lede源码/package/feeds/luci***"
+
+
+
+
+
 
 # rm -rf luci-app-advanced-reboot
 # rm -rf luci-app-aliyundrive-fuse
