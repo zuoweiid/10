@@ -1,15 +1,23 @@
-
-
-
+#
+# https://github.com/P3TERX/Actions-OpenWrt
+#
+# File: .github/workflows/openwrt-bulder.yml
+# Description: Build OpenWrt using GitHub Actions
+#
+# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
 
 name: 编译OpenWRT固件              ## Actions工作流的名称
 on:
-  workflow_dispatch:
+  workflow_dispatch:               ## 工作流程_调度
     inputs:
       ssh:
         description: 'SSH远程'
         required: false
-        default: 'true-false'      ## 输入：true=开启 false=关闭
+        default: 'false'      ## 输入：true=开启 false=关闭
       wxtz:
         description: '微信通知'
         required: false
@@ -25,8 +33,8 @@ on:
 #    - cron: 0 8 */5 * *
 
 
-#  watch:                           ## 点☆Star触发开始编译
-#    types: started
+  watch:                           ## 点☆Star触发开始编译
+    types: started
 
 
 #  push:                            ## 编辑任意（或指定文件）触发编译
@@ -177,7 +185,7 @@ jobs:
 
 
     - name: 下载${{matrix.target}}源码                 ## Clone source code
-      working-directory: /workdir                      ## 指定所有步骤执行工作目录：/workdir
+      working-directory: /workdir                      ## 指定所有步骤执行工作目录：/workdir（同项目仓库的名称）
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt                   # 下载源码，并改为默认目录“openwrt”
@@ -444,7 +452,7 @@ jobs:
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_CONFIG == 'true' && !cancelled()
       with:
         name: .config_${{ env.NAME2 }}${{ env.NAME1 }}
-        path: ./config
+        path: config/.config
 
 
 
