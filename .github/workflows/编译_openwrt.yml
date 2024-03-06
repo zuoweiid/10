@@ -200,7 +200,7 @@ jobs:
         
         
         
-        # cd openwrt                                                                                  # 进入源码 执行目录“openwrt”
+        cd openwrt                                                                                  # 进入源码 执行目录“openwrt”
         
         if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then                # 执行DIY_1脚本！！！
           chmod +x build/${{matrix.target}}/$DIY_P1_SH

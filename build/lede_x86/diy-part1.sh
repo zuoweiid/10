@@ -7,7 +7,7 @@
 # 取消-注释的源（如内置：ssr-plus）
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                         # 显示“helloworld”项目插件；含ssr-plus
 
-cd openwrt
+
 # 添加-第三方源（添加至：feeds.conf.default文件内）插件在 openwrt/package/feeds 目录下；
 # sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加“helloworld”项目插件；含ssr-plus
 # sed -i '$a src-git kenzok https://github.com/kenzok8/openwrt-packages' feeds.conf.default    # 常用插件源
