@@ -97,7 +97,7 @@ jobs:
 #-----------------------------------------------------------------------------------------------------------------
     steps:
     - name: 准备环境 #Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2                                        # 开始运行脚本，之前都是准备工作 加载变量值
 
 #-----------------------------------------------------------------------------------------------------------------
 # 单机型_配置脚本 “settings.ini”
@@ -165,12 +165,12 @@ jobs:
         sudo -E apt-get -qq autoremove -y --purge
         sudo -E apt-get -qq clean -y
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir                         # 创建工作目录“workdir”
-        sudo chown $USER:$GROUPS /workdir              # 提高工作目录权限
+        sudo mkdir -p /workdir                         # 创建工作目录“workdir”，此目录也是以下的执行目录
+        sudo chown $USER:$GROUPS /workdir              # 提高工作目录的权限
 
 #-----------------------------------------------------------------------------------------------------------------
     - name: 下载${{matrix.target}}源码 #Clone source code
-      working-directory: /workdir
+      working-directory: /workdir                                     # 指定所有步骤执行工作目录：/workdir
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt                   # 下载源码，并改为默认目录“openwrt”
@@ -270,7 +270,7 @@ jobs:
 #-----------------------------------------------------------------------------------------------------------------
     - name: 加载DIY_2脚本 #Load custom configuration
       run: |
-        cd openwrt                                                                                 # 进入源码 执行目录“openwrt”
+        cd openwrt                           # 执行工作目录在上级“workdir”，每一步必须进入openwrt目录                                                                              # 进入源码 执行目录“openwrt”
         if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
           chmod +x build/${{matrix.target}}/$DIY_P2_SH
           /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
@@ -324,7 +324,7 @@ jobs:
     - name: 下载DL库 #Download package
       id: package
       run: |
-        cd openwrt
+        cd openwrt                         # 执行工作目录在上级“workdir”，每一步必须进入openwrt目录 
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
@@ -334,7 +334,7 @@ jobs:
     - name: 开始编译固件 #Compile the firmware
       id: compile
       run: |
-        cd openwrt
+        cd openwrt                           # 执行工作目录在上级“workdir”，每一步必须进入openwrt目录 
         echo -e "$(($(nproc)+1)) thread compile"
         make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s
         echo "::set-output name=status::success"
