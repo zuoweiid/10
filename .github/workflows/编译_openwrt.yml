@@ -270,7 +270,7 @@ jobs:
 #-----------------------------------------------------------------------------------------------------------------
     - name: 加载DIY_2脚本 #Load custom configuration
       run: |
-        # cd openwrt                                                                                 # 进入源码 执行目录“openwrt”
+        cd openwrt                                                                                 # 进入源码 执行目录“openwrt”
         if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
           chmod +x build/${{matrix.target}}/$DIY_P2_SH
           /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
