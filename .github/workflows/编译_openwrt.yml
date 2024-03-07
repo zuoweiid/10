@@ -421,52 +421,52 @@ jobs:
         # fi
         
         
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc   # 打包依赖
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install xz-utils btrfs-progs gawk zip unzip curl dosfstools  uuid-runtime
-          sudo -E apt-get -qq install git  git-core
-          sudo -E apt-get -qq install pigz
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
+          # sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc   # 打包依赖
+          # sudo -E apt-get -qq update
+          # sudo -E apt-get -qq install xz-utils btrfs-progs gawk zip unzip curl dosfstools  uuid-runtime
+          # sudo -E apt-get -qq install git  git-core
+          # sudo -E apt-get -qq install pigz
+          # sudo -E apt-get -qq autoremove --purge
+          # sudo -E apt-get -qq clean
         
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
+        # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
         
         
           
-          git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
+          # git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
           
-          cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+o/opt/kernel                # 复制N1固件至70+O核心文件内
-          sudo chmod  -R 777 N1opt/70+o/opt/kernel
-          cd N1opt/70+o/opt/kernel
-          sudo chmod +x *.sh
-          sudo ./mk_s905d_n1.sh
-          sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
-          sudo chmod -R 777 tmp
+          # cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+o/opt/kernel                # 复制N1固件至70+O核心文件内
+          # sudo chmod  -R 777 N1opt/70+o/opt/kernel
+          # cd N1opt/70+o/opt/kernel
+          # sudo chmod +x *.sh
+          # sudo ./mk_s905d_n1.sh
+          # sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
+          # sudo chmod -R 777 tmp
           
-          cd tmp
-          sudo pigz -9 N1-wangxiaofeng-70+o.img
-          ls
-          cp -f N1-wangxiaofeng-70+o.img ${{matrix.target}}/bin/targets/armvirt/*
-          cd ${{matrix.target}}
-          cd ../
+          # cd tmp
+          # sudo pigz -9 N1-wangxiaofeng-70+o.img
+          # ls
+          # cp -f N1-wangxiaofeng-70+o.img ${{matrix.target}}/bin/targets/armvirt/*
+          # cd ${{matrix.target}}
+          # cd ../
          
           
-          cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
-          sudo chmod  -R 777 N1opt/70+/opt/kernel
-          cd N1opt/70+/opt/kernel
-          sudo chmod +x *.sh
-          sudo ./mk_s905d_n1.sh
-          sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
-          sudo chmod -R 777 tmp
-          cd tmp
-          sudo pigz -9 N1-wangxiaofeng-70+.img
-          ls
-          cp -f N1-wangxiaofeng-70+.img ${{matrix.target}}/bin/targets/armvirt/*
+          # cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
+          # sudo chmod  -R 777 N1opt/70+/opt/kernel
+          # cd N1opt/70+/opt/kernel
+          # sudo chmod +x *.sh
+          # sudo ./mk_s905d_n1.sh
+          # sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
+          # sudo chmod -R 777 tmp
+          # cd tmp
+          # sudo pigz -9 N1-wangxiaofeng-70+.img
+          # ls
+          # cp -f N1-wangxiaofeng-70+.img ${{matrix.target}}/bin/targets/armvirt/*
           
           
           
-        fi
-        echo "::set-output name=status::success"
+        # fi
+        # echo "::set-output name=status::success"
 
     - name: 整理文件                           ## Organize files
       id: organizer
