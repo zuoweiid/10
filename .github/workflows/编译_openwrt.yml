@@ -99,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [lede_x86]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
+        target: [lede_N1]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
         # 目前可以选机型：openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
 
 
@@ -421,10 +421,6 @@ jobs:
         # fi
         
         
-        
-        
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
-        
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc   # 打包依赖
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install xz-utils btrfs-progs gawk zip unzip curl dosfstools  uuid-runtime
@@ -432,6 +428,10 @@ jobs:
           sudo -E apt-get -qq install pigz
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
+        
+        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
+        
+        
           
           git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
           
@@ -449,7 +449,7 @@ jobs:
           cp -f N1-wangxiaofeng-70+o.img ${{matrix.target}}/bin/targets/armvirt/*
           cd ${{matrix.target}}
           cd ../
-          
+         
           
           cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
           sudo chmod  -R 777 N1opt/70+/opt/kernel
