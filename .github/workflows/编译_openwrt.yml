@@ -101,7 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [lede_N1]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
+        target: [lede_x86]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
         # 目前可以选机型：openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
 
 
@@ -417,7 +417,7 @@ jobs:
 
 
     - name: 上传bin目录(固件+ipk)              ## Upload bin directory
-      uses: actions/upload-artifact@master     ## 仓库 master 分支
+      uses: actions/upload-artifact@main     ## 仓库 master 分支
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: Bin_${{ env.NAME2 }}${{ env.NAME1 }}_${{ env.date }}     # 文件名称
