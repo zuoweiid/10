@@ -85,8 +85,6 @@ env:
   Author: ${{github.actor}}                              ## 提取 Github用户ID，如：zuoweiid
   GITURL: https://github.com/${{github.repository}}      ## 提取 项目仓库地址 = https://github.com +（用户ID + 项目仓库名字），如：zuoweiid/10
   Run_number: ${{github.run_number}}                     ## 提取 Actions当前运行编号，如#12
-  
-
 
 
 
@@ -466,9 +464,9 @@ jobs:
           cp -f N1-wangxiaofeng-70+.img ${{matrix.target}}/bin/targets/armvirt/*
           
           
-          echo "::set-output name=status::success"
+          
         fi
-        
+        echo "::set-output name=status::success"
 
     - name: 整理文件                           ## Organize files
       id: organizer
