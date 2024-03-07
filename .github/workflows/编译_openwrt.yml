@@ -614,7 +614,7 @@ jobs:
 
 
     - name: 删除工作流运行                            ## Delete workflow runs
-      uses: GitRML/delete-workflow-runs@master        ## 仓库 master 分支；
+      uses: GitRML/delete-workflow-runs@main        ## 仓库 master 分支；
       with:
         retain_days: 10           ## 保留天数（默认是1）
         keep_minimum_runs: 10     ## 保存最少运行数（默认是3）
