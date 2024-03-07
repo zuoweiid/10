@@ -106,7 +106,7 @@ jobs:
 
     steps:
     - name: 准备环境                      ## Checkout
-      uses: actions/checkout@v2           ## 开始运行脚本，之前都是准备工作 加载变量值
+      uses: actions/checkout@v3           ## 开始运行脚本，之前都是准备工作 加载变量值
 
 
 
