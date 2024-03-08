@@ -207,6 +207,7 @@ jobs:
 
 
     - name: 加载DIY_1脚本                              ## Load custom feeds
+      uses: actions/checkout@v2
       run: |
         # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
           # git clone https://github.com/tuanqing/mknop reform
