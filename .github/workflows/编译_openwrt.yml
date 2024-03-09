@@ -292,8 +292,7 @@ jobs:
           /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
         fi
         
-        pwd
-        
+                
         
         
         
