@@ -5,7 +5,7 @@
 #
 pwd
 # 修改默认IP：192.168.1.1
-# sed -i 's/192.168.1.1/10.10.10.1/g' package/base-files/files/bin/config_generate
+ sed -i 's/192.168.1.1/10.10.10.1/g' package/base-files/files/bin/config_generate
 
 # 设置密码为空（登陆时无需输入密码）
 # sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings
