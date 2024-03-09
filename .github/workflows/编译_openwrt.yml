@@ -281,11 +281,15 @@ jobs:
 # sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
 # popd
 
+        # git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
+        # pushd po2lmo
+        # make && sudo make install
+        # popd       
 
 
     - name: 加载DIY_2脚本                    ## Load custom configuration
       run: |
-        #cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
+        # cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
         # if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
           # chmod +x build/${{matrix.target}}/$DIY_P2_SH
@@ -329,10 +333,6 @@ jobs:
          echo "NAME2=Official_" >> $GITHUB_ENV
         fi
         
-        # git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
-        # pushd po2lmo
-        # make && sudo make install
-        # popd       
 
 #-----------------------------------------------------------------------------------------------------------------
     # - name: Apply patches #patch补丁
