@@ -217,6 +217,16 @@ jobs:
         
         cd openwrt                                                                                  # 再次进入源码 的执行目录“openwrt”
         
+        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then
+            echo "***有***"
+        else
+            echo "***无***"
+        fi
+        ls
+        
+        
+        
+        
         if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then                # 执行DIY_1脚本！！！
           chmod +x build/${{matrix.target}}/$DIY_P1_SH
           /bin/bash "build/${{matrix.target}}/$DIY_P1_SH"
