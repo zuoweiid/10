@@ -287,16 +287,15 @@ jobs:
       run: |
         cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
-        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
-          chmod +x build/${{matrix.target}}/$DIY_P2_SH
-          /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        fi
-        
-                
+        # if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
+          # chmod +x build/${{matrix.target}}/$DIY_P2_SH
+          # /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
+        # fi
         
         
         
-        
+        chmod +x build/${{matrix.target}}/$DIY_P2_SH
+        /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
         
         
         
