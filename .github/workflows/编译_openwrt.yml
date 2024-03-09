@@ -285,12 +285,22 @@ jobs:
 
     - name: 加载DIY_2脚本                    ## Load custom configuration
       run: |
-        # cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
+        cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
-        # if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
-          # chmod +x build/${{matrix.target}}/$DIY_P2_SH
-          # /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        # fi
+        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
+          chmod +x build/${{matrix.target}}/$DIY_P2_SH
+          /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
+        fi
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then                      # 复制 编译机型目录内的“diy”文件到openwrt源码内
          cp -Rf build/${{matrix.target}}/diy/* ./
