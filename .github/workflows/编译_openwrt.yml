@@ -215,6 +215,7 @@ jobs:
         
         # https://github.com/unifreq/openwrt_packit       # N1打包源码，未测试   https://github.com/wxfyes/N1packaging/releases
         
+        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt    复制机型内文件到openwrt
         cd openwrt                                                                                  # 再次进入源码 的执行目录“openwrt”
         
         if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then
@@ -299,7 +300,7 @@ jobs:
 
     - name: 加载DIY_2脚本                    ## Load custom configuration
       run: |
-        
+        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt    复制机型内文件到openwrt
         cd openwrt                        # # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         pwd
         ls
