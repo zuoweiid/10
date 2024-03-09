@@ -3,7 +3,7 @@
 # 说明：OpenWrt DIY脚本第2部分（更新提要之后）
 # 如果额外添加的软件包与 Open­Wrt 源码中已有的软件包同名的情况，则需要把 Open­Wrt #源码中的同名软件包删除，否则会优先编译 Open­Wrt 中的软件包。这同样可以利用到的 DIY 脚本，相关指令应写在diy-part2.sh
 #
-
+cd openwrt
 # 修改默认IP：192.168.1.1
 sed -i 's/192.168.1.1/10.10.10.1/g' package/base-files/files/bin/config_generate
 
