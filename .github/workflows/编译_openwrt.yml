@@ -99,7 +99,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [lede_N1]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
+        target: [lede_x86,lede_N1]                ## ←编译指定机型 “就是文件夹名称”，多选用英文逗号隔开可以同时编译；
         # 目前可以选机型：openwrt,  lede_G-DOCK,  lede_hiwifi_HC5861,  lede_linksys_Wrt32x,  lede_N1,  lede_x86
 
 
@@ -208,25 +208,16 @@ jobs:
 
     - name: 加载DIY_1脚本                              ## Load custom feeds
       run: |
-        # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
-          # git clone https://github.com/tuanqing/mknop reform
-        # fi
-        # cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt               # 复制N1打包源码文件到对应机型目录下
+        #if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
+        #  git clone https://github.com/tuanqing/mknop reform
+        #fi
+        
         
         # https://github.com/unifreq/openwrt_packit       # N1打包源码，未测试   https://github.com/wxfyes/N1packaging/releases
         
-        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt      # 复制机型内文件到openwrt
+        
+        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt               # 复制当前 “编译机型” 内的所有DIY文件 至openwrt目录下
         cd openwrt                                                                                  # 再次进入源码 的执行目录“openwrt”
-        
-        if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then
-            echo "***有***"
-        else
-            echo "***无***"
-        fi
-        ls
-        
-        
-        
         
         if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then                # 执行DIY_1脚本！！！
           chmod +x build/${{matrix.target}}/$DIY_P1_SH
@@ -234,6 +225,10 @@ jobs:
         fi
         
         
+        git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
+        pushd po2lmo
+        make && sudo make install
+        popd
         
         
         
@@ -292,39 +287,16 @@ jobs:
 # sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
 # popd
 
-        # git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
-        # pushd po2lmo
-        # make && sudo make install
-        # popd       
 
 
     - name: 加载DIY_2脚本                    ## Load custom configuration
       run: |
-        cp -Rf `find ./ -maxdepth 1 -type d ! -path './openwrt' ! -path './'` openwrt        # 复制机型内文件到openwrt
-        cd openwrt                        # # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
-        pwd
-        ls
+        cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
-        #if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
-        #  chmod +x build/${{matrix.target}}/$DIY_P2_SH
-        #  /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        #fi
-        
-        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then
-            echo "***有***"
-        else
-            echo "***无***"
+        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
+          chmod +x build/${{matrix.target}}/$DIY_P2_SH
+          /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
         fi
-        
-        
-        
-        
-        
-        # chmod +x build/${{matrix.target}}/$DIY_P2_SH
-        # /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        
-        
-        
         
         if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then                      # 复制 编译机型目录内的“diy”文件到openwrt源码内
          cp -Rf build/${{matrix.target}}/diy/* ./
@@ -354,6 +326,7 @@ jobs:
         elif [ $REPO_URL == "https://github.com/openwrt/openwrt" ]; then                           # 当使用官方源码时 变量：NAME2=Official
          echo "NAME2=Official_" >> $GITHUB_ENV
         fi
+        
         
 
 #-----------------------------------------------------------------------------------------------------------------
@@ -422,7 +395,7 @@ jobs:
 
 
     - name: 上传bin目录(固件+ipk)              ## Upload bin directory
-      uses: actions/upload-artifact@main       ## 仓库分支 manin
+      uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: Bin_${{ env.NAME2 }}${{ env.NAME1 }}_${{ env.date }}     # 文件名称
@@ -432,97 +405,65 @@ jobs:
 
     - name: 编译N1机型时,打包（N1、微加云、贝壳云、我家云、S9xxx）固件
       run: |
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
-         cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt                                     # 复制要打包的文件至 reform/openwrt 目录内
+        # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
+         # cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt                                     # 复制要打包的文件至 reform/openwrt 目录内
         
-         cd reform
-         sudo ./gen_openwrt -d -k latest                                                              # 进入打包源码目录内，然后执行N1打包脚本
+         # cd reform
+         # sudo ./gen_openwrt -d -k latest                                                              # 进入打包源码目录内，然后执行N1打包脚本
          
-         devices=("phicomm-n1" "rk3328" "s9xxx" "vplus")
-         cd out
-         for x in ${devices[*]}; do
-           cd $x
-           filename=$(ls | awk -F '.img' '{print $1}')
-           gzip *.img
-           cd ../
-           echo "firmware_$x=$filename" >> $GITHUB_ENV
-         done
-           cd ../../
-           mv -f reform/out/*/*.img.gz openwrt/bin/targets/armvirt/*                                  # 移动N1机型固件到默认bin目录下
-        fi
+         # devices=("phicomm-n1" "rk3328" "s9xxx" "vplus")
+         # cd out
+         # for x in ${devices[*]}; do
+           # cd $x
+           # filename=$(ls | awk -F '.img' '{print $1}')
+           # gzip *.img
+           # cd ../
+           # echo "firmware_$x=$filename" >> $GITHUB_ENV
+         # done
+           # cd ../../
+           # mv -f reform/out/*/*.img.gz openwrt/bin/targets/armvirt/*                                  # 移动N1机型固件到默认bin目录下
+        # fi
         
-        
-        
-            
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc   # 打包依赖
+        # 安装N1打包依赖
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install xz-utils btrfs-progs gawk zip unzip curl dosfstools  uuid-runtime
         sudo -E apt-get -qq install git  git-core
         sudo -E apt-get -qq install pigz
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        
-        
-        
-        
-        
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
-          git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
-          
-          cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+o/opt/kernel                # 复制N1固件至70+O核心文件内
-          sudo chmod  -R 777 N1opt/70+o/opt/kernel
-          cd N1opt/70+o/opt/kernel
-          sudo chmod +x *.sh
-          sudo ./mk_s905d_n1.sh
-          sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
-          sudo chmod -R 777 tmp
-          
-          cd tmp
-          sudo pigz -9 N1-wangxiaofeng-70+o.img
-          ls
-          cp -f N1-wangxiaofeng-70+o.img ${{matrix.target}}/bin/targets/armvirt/*
-          cd ${{matrix.target}}
-          cd ../
-         
-          
-          cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
-          sudo chmod  -R 777 N1opt/70+/opt/kernel
-          cd N1opt/70+/opt/kernel
-          sudo chmod +x *.sh
-          sudo ./mk_s905d_n1.sh
-          sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
-          sudo chmod -R 777 tmp
-          cd tmp
-          sudo pigz -9 N1-wangxiaofeng-70+.img
-          ls
-          cp -f N1-wangxiaofeng-70+.img ${{matrix.target}}/bin/targets/armvirt/*
-          
-          
-          
+        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then
+            git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
+            
+            cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+o/opt/kernel                # 复制N1固件至70+O核心文件内
+            sudo chmod  -R 777 N1opt/70+o/opt/kernel
+            cd N1opt/70+o/opt/kernel
+            sudo chmod +x *.sh
+            sudo ./mk_s905d_n1.sh
+            sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
+            sudo chmod -R 777 tmp
+            
+            cd tmp
+            sudo pigz -9 N1-wangxiaofeng-70+o.img
+            ls
+            cp -f N1-wangxiaofeng-70+o.img ${{matrix.target}}/bin/targets/armvirt/*
+            cd ${{matrix.target}}
+            cd ../
+            
+            
+            cp ${{matrix.target}}/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
+            sudo chmod  -R 777 N1opt/70+/opt/kernel
+            cd N1opt/70+/opt/kernel
+            sudo chmod +x *.sh
+            sudo ./mk_s905d_n1.sh
+            sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
+            sudo chmod -R 777 tmp
+            cd tmp
+            sudo pigz -9 N1-wangxiaofeng-70+.img
+            ls
+            cp -f N1-wangxiaofeng-70+.img ${{matrix.target}}/bin/targets/armvirt/*
         fi
         echo "::set-output name=status::success"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     - name: 整理文件                           ## Organize files
       id: organizer
@@ -644,7 +585,7 @@ jobs:
 
 
     - name: 删除工作流运行                            ## Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main          ## 仓库分支 main
+      uses: GitRML/delete-workflow-runs@main
       with:
         retain_days: 10           ## 保留天数（默认是1）
         keep_minimum_runs: 10     ## 保存最少运行数（默认是3）
