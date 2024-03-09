@@ -298,10 +298,18 @@ jobs:
         #  /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
         #fi
         
+        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then
+            echo "***有***"
+        else
+            echo "***有***"
+        fi
         
         
-        chmod +x build/${{matrix.target}}/$DIY_P2_SH
-        /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
+        
+        
+        
+        # chmod +x build/${{matrix.target}}/$DIY_P2_SH
+        # /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
         
         
         
