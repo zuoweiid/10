@@ -287,39 +287,39 @@ jobs:
       run: |
         cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
-        if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
-          chmod +x build/${{matrix.target}}/$DIY_P2_SH
-          /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
-        fi
+        # if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
+          # chmod +x build/${{matrix.target}}/$DIY_P2_SH
+          # /bin/bash "build/${{matrix.target}}/$DIY_P2_SH"
+        # fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then                      # 复制 编译机型目录内的“diy”文件到openwrt源码内
-         cp -Rf build/${{matrix.target}}/diy/* ./
-        fi
+        # if [ -n "$(ls -A "build/${{matrix.target}}/diy" 2>/dev/null)" ]; then                      # 复制 编译机型目录内的“diy”文件到openwrt源码内
+         # cp -Rf build/${{matrix.target}}/diy/* ./
+        # fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/files" 2>/dev/null)" ]; then                    # 复制 编译机型目录内的“files”文件到openwrt源码内
-         cp -rf build/${{matrix.target}}/files files
-         chmod -R 777 build/${{matrix.target}}/files/* ./
-        fi
+        # if [ -n "$(ls -A "build/${{matrix.target}}/files" 2>/dev/null)" ]; then                    # 复制 编译机型目录内的“files”文件到openwrt源码内
+         # cp -rf build/${{matrix.target}}/files files
+         # chmod -R 777 build/${{matrix.target}}/files/* ./
+        # fi
         
-        if [ -n "$(ls -A "build/${{matrix.target}}/patches" 2>/dev/null)" ]; then                  # 复制 编译机型目录内的“patches”文件到openwrt源码内
-          find "build/${{matrix.target}}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 --forward --no-backup-if-mismatch"
-        fi
+        # if [ -n "$(ls -A "build/${{matrix.target}}/patches" 2>/dev/null)" ]; then                  # 复制 编译机型目录内的“patches”文件到openwrt源码内
+          # find "build/${{matrix.target}}/patches" -type f -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 --forward --no-backup-if-mismatch"
+        # fi
         
-        [ -e build/${{matrix.target}}/$CONFIG_FILE ]                                               # 移动 编译机型目录内的“.config”文件到openwrt源码内
-        mv build/${{matrix.target}}/$CONFIG_FILE .config
+        # [ -e build/${{matrix.target}}/$CONFIG_FILE ]                                               # 移动 编译机型目录内的“.config”文件到openwrt源码内
+        # mv build/${{matrix.target}}/$CONFIG_FILE .config
         
-        if [ $REPO_URL == "https://github.com/coolsnowwolf/lede" ]; then                           # 当使用Lede源码时，变量：NAME2=Lede   ZUOZHE=lean
-         echo "NAME2=Lede_" >> $GITHUB_ENV
-         echo "ZUOZHE=lean" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/Lienol/openwrt" ]; then                            # 当使用Lienol源码时 变量：NAME2=Lienol   ZUOZHE=lienol
-         echo "NAME2=Lienol_" >> $GITHUB_ENV
-         echo "ZUOZHE=lienol" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/project-openwrt/openwrt" ]; then                   # 当使用Project源码时 变量：NAME2=Project   ZUOZHE=CTCGFW
-         echo "NAME2=Project_" >> $GITHUB_ENV
-         echo "ZUOZHE=CTCGFW" >> $GITHUB_ENV
-        elif [ $REPO_URL == "https://github.com/openwrt/openwrt" ]; then                           # 当使用官方源码时 变量：NAME2=Official
-         echo "NAME2=Official_" >> $GITHUB_ENV
-        fi
+        # if [ $REPO_URL == "https://github.com/coolsnowwolf/lede" ]; then                           # 当使用Lede源码时，变量：NAME2=Lede   ZUOZHE=lean
+         # echo "NAME2=Lede_" >> $GITHUB_ENV
+         # echo "ZUOZHE=lean" >> $GITHUB_ENV
+        # elif [ $REPO_URL == "https://github.com/Lienol/openwrt" ]; then                            # 当使用Lienol源码时 变量：NAME2=Lienol   ZUOZHE=lienol
+         # echo "NAME2=Lienol_" >> $GITHUB_ENV
+         # echo "ZUOZHE=lienol" >> $GITHUB_ENV
+        # elif [ $REPO_URL == "https://github.com/project-openwrt/openwrt" ]; then                   # 当使用Project源码时 变量：NAME2=Project   ZUOZHE=CTCGFW
+         # echo "NAME2=Project_" >> $GITHUB_ENV
+         # echo "ZUOZHE=CTCGFW" >> $GITHUB_ENV
+        # elif [ $REPO_URL == "https://github.com/openwrt/openwrt" ]; then                           # 当使用官方源码时 变量：NAME2=Official
+         # echo "NAME2=Official_" >> $GITHUB_ENV
+        # fi
         
         # git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
         # pushd po2lmo
