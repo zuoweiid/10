@@ -222,10 +222,7 @@ jobs:
           /bin/bash "build/${{matrix.target}}/$DIY_P1_SH"
         fi
         
-        git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
-        pushd po2lmo
-        make && sudo make install
-        popd
+        
         
         
         
@@ -324,7 +321,10 @@ jobs:
          echo "NAME2=Official_" >> $GITHUB_ENV
         fi
         
-        
+        # git clone https://github.com/openwrt-dev/po2lmo.git                  # 下载po2lmo依赖
+        # pushd po2lmo
+        # make && sudo make install
+        # popd       
 
 #-----------------------------------------------------------------------------------------------------------------
     # - name: Apply patches #patch补丁
