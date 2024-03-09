@@ -435,33 +435,39 @@ jobs:
         if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then
             git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
             
-            cp openwrt/bin/targets/armvirt/*/*.tar.gz N1opt/70+o/opt/kernel                # 复制N1固件至70+O核心文件内   # cp: cannot stat 'lede_N1/bin/targets/armvirt/*/*.tar.gz': No such file or directory
-            sudo chmod  -R 777 N1opt/70+o/opt/kernel
-            cd N1opt/70+o/opt/kernel
+            mkdir -p opt
+            mv -f N1opt/70+ opt/
+            mv -f N1opt/70+o opt/
+            rm -rf N1opt
+            
+            cp openwrt/bin/targets/armvirt/*/*.tar.gz opt/70+o/opt/kernel  # 复制N1固件至70+O核心文件内
+            sudo chmod -R 777 opt/70+o/opt/kernel
+            cd opt/70+o/opt/kernel
             sudo chmod +x *.sh
             sudo ./mk_s905d_n1.sh
             sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
             sudo chmod -R 777 tmp
-            
             cd tmp
             sudo pigz -9 N1-wangxiaofeng-70+o.img
             ls
-            cp -f N1-wangxiaofeng-70+o.img openwrt/bin/targets/armvirt/*
+            
+            mv *.img.gz -t openwrt/bin/targets/armvirt/*
+            mv *.sh -t openwrt/bin/targets/armvirt/*
             cd ${{matrix.target}}
             cd ../
             
             
-            cp openwrt/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
-            sudo chmod  -R 777 N1opt/70+/opt/kernel
-            cd N1opt/70+/opt/kernel
-            sudo chmod +x *.sh
-            sudo ./mk_s905d_n1.sh
-            sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
-            sudo chmod -R 777 tmp
-            cd tmp
-            sudo pigz -9 N1-wangxiaofeng-70+.img
-            ls
-            cp -f N1-wangxiaofeng-70+.img openwrt/bin/targets/armvirt/*
+            # cp openwrt/bin/targets/armvirt/*/*.tar.gz N1opt/70+/opt/kernel
+            # sudo chmod  -R 777 N1opt/70+/opt/kernel
+            # cd N1opt/70+/opt/kernel
+            # sudo chmod +x *.sh
+            # sudo ./mk_s905d_n1.sh
+            # sudo cp files/update-amlogic-openwrt.sh tmp/update-amlogic-openwrt.sh
+            # sudo chmod -R 777 tmp
+            # cd tmp
+            # sudo pigz -9 N1-wangxiaofeng-70+.img
+            # ls
+            # cp -f N1-wangxiaofeng-70+.img openwrt/bin/targets/armvirt/*
         fi
         echo "::set-output name=status::success"
 
@@ -495,7 +501,7 @@ jobs:
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_CONFIG == 'true' && !cancelled()
       with:
         name: .config_${{ env.NAME2 }}${{ env.NAME1 }}
-        path: config/config              # config/.config 第20次
+        path: ./config              # config/.config 第20次
 
 
 
