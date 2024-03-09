@@ -301,7 +301,7 @@ jobs:
         if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then
             echo "***有***"
         else
-            echo "***有***"
+            echo "***无***"
         fi
         
         
