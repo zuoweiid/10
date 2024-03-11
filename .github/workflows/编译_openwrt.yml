@@ -442,6 +442,7 @@ jobs:
         
             sudo chmod  -R 777 /opt             ## 根目录下的opt
             cp -r N1opt/70+o/opt/* /opt    ## 70+o 复制 kernel 文件夹至，根目录下的/opt
+            cd openwrt/bin/targets/armvirt/64
             pwd
             ls
             cp -r openwrt/bin/targets/armvirt/*/*.tar.gz /opt/kernel      # 复制N1固件至根目录下的/opt/kernel目录内
