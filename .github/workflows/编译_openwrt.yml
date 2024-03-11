@@ -17,7 +17,7 @@ on:
       ssh:
         description: 'SSH远程'
         required: false
-        default: 'false'      ## 输入：true=开启 false=关闭
+        default: 'false'       ## 输入：true=开启 false=关闭
       wxtz:
         description: '微信通知'
         required: false
