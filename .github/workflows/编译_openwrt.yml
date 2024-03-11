@@ -405,7 +405,7 @@ jobs:
     - name: N1云脚本打包    # 将 Armvirt 打包为 OpenWrt
       uses: ophub/flippy-openwrt-actions@main           # 云脚本
       env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz     # N1编译固件路径
+        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz     # N1编译固件路径
         PACKAGE_SOC: s905d                                    # 盒子型号，默认只是N1
         KERNEL_VERSION_NAME: 6.1.79                           # 内核版本
         WHOAMI: huangqian8                                    # 作者著名，
