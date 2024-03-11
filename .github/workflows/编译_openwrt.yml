@@ -408,7 +408,7 @@ jobs:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*.tar.gz     # N1编译固件路径
         PACKAGE_SOC: s905d                                    # 盒子型号，默认只是N1
         KERNEL_VERSION_NAME:6.1.79                            # 内核版本
-        WHOAMI: 雷锋                                          # 作者著名，
+        WHOAMI: huangqian8                                    # 作者著名，
 
         # https://github.com/ophub/flippy-openwrt-actions/blob/main/README.cn.md    # N1云脚本打包
 
