@@ -151,7 +151,7 @@ jobs:
 
 
     - name: 准备编译_微信通知             ## Github设置里需添微信SCKEY
-      uses: emon100/Action-Serverchan@v2  ## Action的 Serverchan推送
+      uses: emon100/Action-Serverchan@v2  ## Action 中的Serverchan推送
       if: env.SERVERCHAN_SCKEY == 'true' || (github.event.inputs.wxtz == 'wxtz' && github.event.inputs.wxtz  != 'false')
       with:
         SCKEY: ${{ secrets.SCKEY }}
@@ -171,7 +171,7 @@ jobs:
 
     - name: 安装编译环境                ## Initialization environment
       env:
-        DEBIAN_FRONTEND: noninteractive
+        DEBIAN_FRONTEND: noninteractive      ## 非交互模式
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update -y
@@ -181,12 +181,13 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir                         # 创建工作目录“workdir”，也是以下步骤的默认执行目录!!!
         sudo chown $USER:$GROUPS /workdir              # 提高工作目录的权限
-
+        sudo -E apt-get -qq install xz-utils btrfs-progs zip dosfstools uuid-runtime pigz         # N1打包必需依赖
 
 
     - name: 下载${{matrix.target}}源码                 ## Clone source code
       working-directory: /workdir                      ## 指定所有步骤执行工作目录：/workdir（同项目仓库的名称）
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt                   # 下载源码，并改为默认目录“openwrt”
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt             # 查看磁盘使用空间情况
@@ -208,6 +209,7 @@ jobs:
 
     - name: 加载DIY_1脚本                              ## Load custom feeds
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         #if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
         #  git clone https://github.com/tuanqing/mknop reform
         #fi
@@ -291,6 +293,7 @@ jobs:
 
     - name: 加载DIY_2脚本                    ## Load custom configuration
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         cd openwrt                           # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
         if [ -f "build/${{matrix.target}}/$DIY_P2_SH" ]; then                                      # 执行DIY_2脚本
@@ -336,11 +339,21 @@ jobs:
         # find "devices/common/patches" -type f ! -path 'devices/common/patches/china_mirrors.patch' -name '*.patch' -print0 | sort -z | xargs -I % -t -0 -n 1 sh -c "cat '%'  | patch -d './' -p1 -E --forward --no-backup-if-mismatch"
 #-----------------------------------------------------------------------------------------------------------------
 
- 
+
+
+    - name: SSH链接（到此预计10分钟）             ## SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        
+        
         
     - name: 下载DL库                             ## Download package
       id: package
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         cd openwrt                               # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
         make defconfig
@@ -353,6 +366,7 @@ jobs:
     - name: 开始编译固件                         ## Compile the firmware
       id: compile
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         cd openwrt                             # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
         echo -e "$(($(nproc)+1)) thread compile"
@@ -405,17 +419,9 @@ jobs:
 
 
 
-    - name: SSH链接（到此预计10分钟）             ## SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        
-       
-
     - name: 编译N1机型时,打包（N1、微加云、贝壳云、我家云、S9xxx）固件
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
          # cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt                                     # 复制要打包的文件至 reform/openwrt 目录内
         
@@ -440,14 +446,6 @@ jobs:
         
         
         
-        # 安装N1打包依赖
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install xz-utils btrfs-progs gawk zip unzip curl dosfstools  uuid-runtime
-        sudo -E apt-get -qq install git  git-core
-        sudo -E apt-get -qq install pigz
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
         if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then
             git clone https://github.com/wxfyes/N1packaging.git N1opt                                 # 下载N1打包源码
         else
@@ -482,6 +480,7 @@ jobs:
     - name: 整理文件                           ## Organize files
       id: organizer
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         mkdir config                                                                                  # 创建config文件夹
         find openwrt/bin/targets/ -name "*config.buildinfo*" | xargs -i mv -f {} config               # 寻找“config.buildinfo”文件移动并改名为"config"
         
@@ -526,6 +525,7 @@ jobs:
       id: cowtransfer
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
         echo "::warning file=奶牛快传（${{matrix.target}}）::$(cat cowtransfer.log | grep https)"
@@ -538,6 +538,7 @@ jobs:
       id: wetransfer
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=WeTransfer链接（${{matrix.target}}）::$(cat wetransfer.log | grep https)"
@@ -548,6 +549,7 @@ jobs:
     - name: 提取「奶牛快传」&「WeTransfer」下载链接       ## 自动提取链接
       if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
+        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
         
