@@ -91,7 +91,7 @@ env:
 jobs:
   build:
     runs-on: Ubuntu-20.04                 ## ←选择编译系统版本
-    if: github.event.repository.owner.id == github.event.sender.id           ## 只有仓库所有者才能使用  “点 Star启动编译”
+    if: github.event.repository.owner.id == github.event.sender.id   ## 只有仓库所有者才能使用  “点 Star启动编译”
     
     
     
@@ -132,6 +132,7 @@ jobs:
 
     - name: 加载settings.ini脚本变量      ## 编译前加载 /build/机型文件夹/settings.ini 脚本
       run: |
+        pwd && ls                                                     # 显示当前步骤的路径和所有文件
         source "${GITHUB_WORKSPACE}/build/${{matrix.target}}/settings.ini"               # 加载配置文件：/项目仓库名称/build/机型文件/settings.ini（每个机型文件夹内都有这个配置文件）
         echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV                                       # = 固件源码地址
         echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV                                 # = 固件源码的分支
@@ -173,21 +174,22 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive      ## 非交互模式
       run: |
+        pwd && ls                                                     # 显示当前步骤的路径和所有文件
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update -y
         sudo -E apt-get -qq install -y build-essential asciidoc binutils bzip2 gawk gettext git libc6-dev libncurses5 libtinfo-dev libtinfo5 ncurses-doc libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
         sudo -E apt-get -qq autoremove -y --purge
         sudo -E apt-get -qq clean -y
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir                         # 创建工作目录“workdir”，也是以下步骤的默认执行目录!!!
-        sudo chown $USER:$GROUPS /workdir              # 提高工作目录的权限
-        sudo -E apt-get -qq install xz-utils btrfs-progs zip dosfstools uuid-runtime pigz         # N1打包必需依赖
+        sudo mkdir -p /workdir                         # 根目录下新建“workdir”目录，用于下载源码
+        sudo chown $USER:$GROUPS /workdir              # 提高“workdir”目录的权限
+        sudo -E apt-get -qq install xz-utils btrfs-progs zip dosfstools uuid-runtime pigz         # N1固件打包必需要的依赖
 
 
     - name: 下载${{matrix.target}}源码                 ## Clone source code
-      working-directory: /workdir                      ## 指定所有步骤执行工作目录：/workdir（同项目仓库的名称）
+      working-directory: /workdir                      ## 源码指定下载到根目录下新建的“workdir”目录，
       run: |
-        pwd && ls -a                                                  # 显示当前步骤的路径和所有文件
+        pwd && ls                                                     # 显示当前步骤的路径和所有文件
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt                   # 下载源码，并改为默认目录“openwrt”
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt             # 查看磁盘使用空间情况
