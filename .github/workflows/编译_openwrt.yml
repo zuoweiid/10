@@ -416,8 +416,8 @@ jobs:
 
     - name: 编译N1机型时,打包（N1、微加云、贝壳云、我家云、S9xxx）固件
       run: |
-        if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
-         cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt                                     # 复制要打包的文件至 reform/openwrt 目录内
+        # if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then             # 当编译N1机型目录时，复制N1固件到打包目录下，
+         # cp openwrt/bin/targets/armvirt/*/*.tar.gz reform/openwrt                                     # 复制要打包的文件至 reform/openwrt 目录内
         
          # cd reform
          # sudo ./gen_openwrt -d -k latest                                                              # 进入打包源码目录内，然后执行N1打包脚本
@@ -458,7 +458,7 @@ jobs:
         
             sudo chmod  -R 777 /opt             ## 根目录下的opt
             cp -r N1opt/70+o/opt/* /opt    ## 70+o 复制 kernel 文件夹至，根目录下的/opt
-            cd openwrt/bin/targets/armvirt/64
+            # cd openwrt/bin/targets/*/*
             pwd
             ls
             cp -r openwrt/bin/targets/*/*/*.tar.gz /opt/kernel      # 复制N1固件至根目录下的/opt/kernel目录内
