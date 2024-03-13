@@ -37,9 +37,9 @@ on:
 #    types: started
 
 
-  push:                            ## 编辑任意（或指定文件）触发编译
-    branches:                      ## 编辑任意 触发编译
-      - master                     ## 当主代码更新，触发编译
+#  push:                            ## 编辑任意（或指定文件）触发编译
+#    branches:                      ## 编辑任意 触发编译
+#      - master                     ## 当主代码更新，触发编译
 
 
 #    paths:
@@ -380,7 +380,8 @@ jobs:
         
         echo -e "$(($(nproc)+1)) thread compile"
         make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s
-        echo "::set-output name=status::success"
+        # echo "::set-output name=status::success"         # 已经弃用
+        echo "status=success" >>$GITHUB_OUTPUT
         
         DEVICE=$(egrep -o "CONFIG_TARGET.*DEVICE.*=y" .config | sed -r 's/.*(.*)=y/\0/')            # DEVICE  = 固件机型的变量（在.config配置文件中得出）
         DEVICE2=$(egrep -o "CONFIG_TARGET.*_64_Generic=y" .config | sed -r 's/.*(.*)=y/\0/')        # DEVICE2 = 固件平台的变量（在.config配置文件中得出）如：X86、
@@ -483,7 +484,8 @@ jobs:
             cd $GITHUB_WORKSPACE     # 进入仓库执行目录
             
             rm -rf N1opt             # 已打包完成，删除打包目录
-        echo "::set-output name=status::success"
+        # echo "::set-output name=status::success"   # 被弃用
+        echo "status=success" >>$GITHUB_OUTPUT
 
     - name: 整理文件                           ## Organize files
       id: organizer
@@ -509,7 +511,8 @@ jobs:
         rm -rf packages                                                                                # 删除“packages”文件夹
         
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV                                                            # = 当前固件目录变量为 FIRMWARE
-        echo "::set-output name=status::success"                                                       # 列出文件夹内 所有名称
+        # echo "::set-output name=status::success"                                                       # 列出文件夹内 所有名称
+        echo "status=success" >>$GITHUB_OUTPUT
 
 
 
