@@ -1,133 +1,82 @@
 #!/bin/bash
+# lede_path="${PWD}"     ##目录变量=Lede源码目录；
+lede_path=$(cd `dirname $0`; pwd)     ##目录变量=Lede源码目录；
+cd $lede_path
+
+# 字体颜色配置
+print_error() {                           ## 打印红色字体
+    echo -e "\033[31m$1\033[0m"
+}
+
+print_green() {                           ## 打印绿色字体
+    echo -e "\033[32m$1\033[0m"
+}
+
+print_yellow() {                          ## 打印黄色字体
+    echo -e "\033[33m$1\033[0m"
+}
 
 
-
-# 取消-注释的源（如内置：ssr-plus）
-# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                         # 显示“helloworld”项目插件；含ssr-plus
+# 第三方插件源码
 
 
-# 添加-第三方源（添加至：feeds.conf.default文件内）插件在 openwrt/package/feeds 目录下；
-# sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加“helloworld”项目插件；含ssr-plus
-# sed -i '$a src-git kenzok https://github.com/kenzok8/openwrt-packages' feeds.conf.default    # 常用插件源
-# sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default                # 常用插件源_依赖安装
-# sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default      # PPTP VPN 服务器等。。。
-# sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default # 适合一键下载编译（smpackage目录）
-# --------------------单独添加插件部分--------------------
-sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default          # 适合一键下载编译（smpackage目录）
-
+#---------------------------------------------------------------------------------------------------------------------------------------
 ./scripts/feeds clean                                                         # 清除编译临时文件
 ./scripts/feeds update -a                                                     # 更新插件源
+#---------------------------------------------------------------------------------------------------------------------------------------
 
 
-#----------------------------------------------删除 LEDE源码内luci自带插件----------------------------------------------
+cd $lede_path   #---删除 LEDE源码内 luci/applications 自带插件
+if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删除以下文件
+	print_error "***删除冲突插件*** 路径：feeds/luci/applications "
+	cd $lede_path/feeds/luci/applications           # 进入 LEDE源码内applications目录内；
+	mkdir -p app && mv -f ./* app                   # 临时创建app文件夹，移动当前全部文件到app目录内，后续会删除；
+	
+	# 移动保留的插件； mv -f app/插件名称 ./
+	mv -f app/luci-app-samba4 ./                    # 网络共享（必备插件）
+	mv -f app/luci-app-firewall ./                  # 防火墙（必备插件）
+	
+	mv -f app/luci-app-autoreboot ./				# 计划定时重启（autopoweroff二选一）（常用）
+	mv -f app/luci-app-ddns ./						# 动态DNS（集成阿里DDNS客户端）（常用）
+	mv -f app/luci-app-filetransfer ./				# 文件传输（可web安装ipk包）（常用）
+	mv -f app/luci-app-netdata ./					# Netdata实时监控（CPU详情图表）
+	mv -f app/luci-app-nlbwmon ./					# 带宽监控（显示、配置、备份）（常用）
+	mv -f app/luci-app-ttyd ./						# 网页终端命令行（常用）
+	mv -f app/luci-app-unblockmusic ./				# 网易云解锁插件，目前有效 勿删除！！！（常用）
+	mv -f app/luci-app-vlmcsd ./					# KMS服务器设置（常用）
+	mv -f app/luci-app-webadmin ./					# Web管理页面设置；修改80默认端口（常用）
+	mv -f app/luci-app-zerotier ./					# ZeroTier内网穿透（常用）
+	
+	rm -rf app                                      # 删除临时创建的app目录；
+	cd $lede_path/feeds/luci/themes      # 进入themes主题目录
 
-cd feeds/luci/applications           # 进入 LEDE源码内applications目录内；
-echo "***目录applications插件安装后路径：/lede源码/package/feeds/luci***"
-
-
-
-
-
-
-# rm -rf luci-app-advanced-reboot
-# rm -rf luci-app-aliyundrive-fuse
-# rm -rf luci-app-aliyundrive-webdav
-rm -rf luci-app-argon-config         # 删除luci-app-argon-config主题设置
-# rm -rf luci-app-design-config
-# rm -rf luci-app-dockerman
-# rm -rf luci-app-easymesh
-# rm -rf luci-app-eqos
-# rm -rf luci-app-mosdns
-rm -rf luci-app-unblockmusic       # 此插件包目前有效果，勿删除！！！（网易云解锁）
-# rm -rf luci-app-ipsec-server       # lienol插件包内最新
-# rm -rf luci-app-openvpn-server
-rm -rf luci-app-serverchan           # 删除ServerChan微信推送
-rm -rf luci-app-pushbot              # 删除PushBot 全能推送
-
-cd ../                               # 退回至上级目录
-cd themes                            # 进入themes主题目录
-
-rm -rf luci-theme-argon              # 删除Argon主题（旧版必删）
-rm -rf luci-theme-argon-mod          # 删除Argon主题
-# rm -rf luci-theme-bootstrap
-rm -rf luci-theme-design
-rm -rf luci-theme-material
-rm -rf luci-theme-netgear
-
-cd ../
-cd ../
-cd ../                               # 退回至lede目录内；
-#-----------------------------------------------------------------------------------------------------------------------
-
-#----------------------------------------------删除 Kenzok目录内插件----------------------------------------------------
-
-# cd feeds/kenzok                        # 进入 LEDE源码内kenzok目录内；
-         
-# rm -rf luci-app-argon-config
-# rm -rf luci-app-argone-config
-# rm -rf luci-app-unblockneteasemusic    # 删除网易云解锁
-# rm -rf UnblockNeteaseMusic
-# rm -rf luci-theme-argon
-# rm -rf luci-theme-argone
-
-# rm -rf luci-app-advanced
-# rm -rf luci-app-aliyundrive-webdav
-# rm -rf luci-app-design-config
-# rm -rf luci-app-dockerman
-# rm -rf luci-app-easymesh
-# rm -rf luci-app-eqos
-# rm -rf luci-app-mosdns
-# cd ../ && cd ../ && cd ../            # 退回至lede目录内
+	rm -rf luci-theme-argon              # 删除Argon主题（旧版必删）
+	rm -rf luci-theme-argon-mod          # 删除Argon主题
+	# rm -rf luci-theme-bootstrap
+	rm -rf luci-theme-design
+	rm -rf luci-theme-material
+	rm -rf luci-theme-netgear
+else
+	print_yellow "***目录不存在*** 路径：feeds/luci/applications "
+fi
 
 
-# 删除lienol目录内插件
-# luci-app-guest-wifi    # LEDE源码内最新
-# luci-app-kodexplorer
-# luci-app-pppoe-server
-# luci-app-pptp-server
-# luci-app-ramfree
-# luci-app-socat
-# luci-app-softethervpn
-#-----------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------
+cd $lede_path   
+./scripts/feeds install -a                             ##安装_插件源包（安装后目录：lede源码/package/feeds/***）
+#---------------------------------------------------------------------------------------------------------------------------------------
 
-#----------------------------------------------删除 smpackage目录内插件-------------------------------------------------
-
-cd feeds/smpackage                      # 进入 LEDE源码内smpackage目录内；
-echo "***目录smpackage插件安装后路径：/lede源码/package/feeds/smpackage***"
-
-rm -rf luci-app-argon-config
-rm -rf luci-app-argone-config
-rm -rf luci-app-pushbot
-rm -rf oaf                              # 删除OpenAppFilter 应用访问过滤
-
-rm -rf luci-app-unblockneteasemusic     # 删除网易云解锁
-rm -rf UnblockNeteaseMusic
-rm -rf UnblockNeteaseMusic-Go
-
-rm -rf luci-theme-argon
-rm -rf luci-theme-argone
-rm -rf luci-theme-atmaterial_new
-rm -rf luci-theme-design
-rm -rf luci-theme-edge
-rm -rf luci-theme-ifit
-rm -rf luci-theme-kucat
-rm -rf luci-theme-opentopd
-rm -rf luci-theme-tomato
-cd ../
-cd ../                                 # 退回至lede目录内
-#-----------------------------------------------------------------------------------------------------------------------
-
-./scripts/feeds install -a             ##安装_插件源包
 
 # 下载第三方插件和主题
-git clone  https://github.com/destan19/OpenAppFilter package/otherapp/OpenAppFilter         ##下载OpenAppFilter 应用访问过滤
-git clone  https://github.com/zzsj0928/luci-app-pushbot package/otherapp/luci-app-pushbot   ##PushBot 全能推送，改名后
-  
 
 
-git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/otherapp/luci-app-argon-config                 ##Argon主题设置
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  package/otherapp/luci-theme-argon                          ##Argon主题；匹配Lede源码
-git clone https://github.com/sbwml/luci-app-alist package/otherapp/luci-app-alist                                                ##alist网盘
+# 升级 Go版本
+# rm -rf feeds/packages/lang/golang && git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
+
+git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp                                                    ## 下载自己整理的源码
+
+
+
 
 
 
