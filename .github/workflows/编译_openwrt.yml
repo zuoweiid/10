@@ -213,7 +213,7 @@ jobs:
         
     - name: 加载DIY_1脚本                              ## Load custom feeds
       run: |
-        # pwd && ls                                      # 显示当前步骤的路径和所有文件和文件夹；
+        pwd && ls                                      # 显示当前步骤的路径和所有文件和文件夹；
         
         #if [ ${{matrix.target}} == "lede_N1" -o ${{matrix.target}} == "Project_N1" ];then           # 当编译 N1机型时_下载在线打包依赖（目前已经删库）
         #  git clone https://github.com/tuanqing/mknop reform
@@ -228,8 +228,7 @@ jobs:
         
         if [ -f "build/${{matrix.target}}/$DIY_P1_SH" ]; then                # 执行DIY_1脚本！！！
           chmod +x build/${{matrix.target}}/$DIY_P1_SH
-          bash "build/${{matrix.target}}/$DIY_P1_SH"
-          pwd && ls                                      # 显示当前步骤的路径和所有文件和文件夹；
+          /bin/bash "build/${{matrix.target}}/$DIY_P1_SH"
         fi
         
         
@@ -244,25 +243,7 @@ jobs:
           # git clone -b $REPO_BRANCH --single-branch https://github.com/281677160/openwrt-package package/danshui
         # fi
         
-        # git clone https://github.com/tuanqing/install-program package/install-program                  # 下载N1写入包（编译前勾选：Utilities--> install-program）
-        # git clone https://github.com/Hyy2001X/luci-app-autoupdate package/luci-app-autoupdate          # 在线更新固件插件
-        # git clone https://github.com/esirplayground/luci-app-poweroff package/luci-app-poweroff       # 关机插件（不选择！！！）
-        # git clone https://github.com/Hyy2001X/luci-app-shutdown package/luci-app-shutdown              # 一键关机/重启
-        
-        # git clone https://github.com/destan19/openappfilter.git package/OpenAppFilter                  # 下载OpenAppFilter 应用访问过滤
-        # git clone https://github.com/tty228/luci-app-serverchan.git package/luci-app-serverchan        # 下载ServerChan微信推送
-        # git clone https://github.com/zzsj0928/luci-app-serverchand.git package/luci-app-serverchand   # 钉钉机器人推送（已弃用）（不选择！！！）
-        # git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot                # PushBot 全能推送，改名后
-        # git clone https://github.com/immortalwrt/luci-app-unblockneteasemusic.git package/luci-app-unblockneteasemusic          # 下载新版网易云解锁
-        
-        # git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon        # 下载新版Argon主题
-        # git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config           # 下载新版Argon主题设置
-        # git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-app-jd-dailybonus     # 京东签到
-        # git clone https://github.com/jenson85/luci-theme-darkmatter.git package/luci-theme-darkmatter        # 下载darkmatter黑暗主题
-        # git clone https://github.com/rosywrt/luci.git package/luci-rosy                                      # rosy玫瑰红主题
-        #git clone https://github.com/project-openwrt/openwrt-tmate.git package/luci-openwrt-tmate            # 不知名主题
-        # git clone https://github.com/openwrt-develop/luci-theme-atmaterial package/luci-theme-atmaterial     # 经典主题
-        #git clone --depth=1 -b openwrt-18.06 https://github.com/rosywrt/luci-theme-rosy                      # rosy玫瑰红主题
+
         
         
 # #修复mt76无线驱动程序
@@ -363,7 +344,7 @@ jobs:
         echo -e "$(($(nproc)+1)) thread compile"
         make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s
         # echo "::set-output name=status::success"         # 已经弃用
-        # echo "status=success" >>$GITHUB_OUTPUT             # 新代码
+        echo "status=success" >>$GITHUB_OUTPUT             # 新代码
         
         DEVICE=$(egrep -o "CONFIG_TARGET.*DEVICE.*=y" .config | sed -r 's/.*(.*)=y/\0/')            # DEVICE  = 固件机型的变量（在.config配置文件中得出）
         DEVICE2=$(egrep -o "CONFIG_TARGET.*_64_Generic=y" .config | sed -r 's/.*(.*)=y/\0/')        # DEVICE2 = 固件平台的变量（在.config配置文件中得出）如：X86、
