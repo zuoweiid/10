@@ -75,7 +75,7 @@ sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.con
 # 升级 Go版本
 # rm -rf feeds/packages/lang/golang && git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
-# git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp                                                    ## 下载自己整理的源码
+git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp                                                    ## 下载自己整理的源码
 
 
 
