@@ -1,5 +1,6 @@
 #!/bin/bash
-lede_path=$(cd `dirname $0`; pwd)     ##目录变量=Lede源码目录；
+lede_path="${PWD}"     ##目录变量=Lede源码目录；
+# lede_path=$(cd `dirname $0`; pwd)     ##目录变量=Lede源码目录；
 cd $lede_path
 
 # 修改默认IP：192.168.1.1
