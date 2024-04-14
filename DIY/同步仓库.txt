@@ -1,0 +1,3 @@
+openwrt-package=openwrt-packages
+
+update-package=small_action
