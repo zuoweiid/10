@@ -24,6 +24,7 @@ print_yellow() {                          ## 打印黄色字体
 cd $lede_path   #---删除 LEDE源码内 luci/applications 自带插件
 if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删除以下文件
 	print_error "***删除冲突插件*** 路径：feeds/luci/applications "
+	cd $lede_path/feeds/luci/applications           # 进入 LEDE源码内applications目录内；
 	mkdir -p app && mv -f ./* app                   # 临时创建app文件夹，移动当前全部文件到app目录内，后续会删除；
 	
 	mv -f app/luci-app-samba4 ./                    # 网络共享（必备插件）
