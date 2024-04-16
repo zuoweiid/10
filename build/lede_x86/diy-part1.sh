@@ -1,5 +1,5 @@
 #!/bin/bash
-lede_path="${PWD}"     ##目录变量=Lede源码目录；
+lede_path="${PWD}"                      ##目录变量=Lede源码目录；
 # lede_path=$(cd `dirname $0`; pwd)     ##目录变量=Lede源码目录；
 cd $lede_path
 
@@ -16,6 +16,9 @@ print_yellow() {                          ## 打印黄色字体
     echo -e "\033[33m$1\033[0m"
 }
 
+# 第三方插件源码
+
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 ./scripts/feeds clean                                                         # 清除编译临时文件
 ./scripts/feeds update -a                                                     # 更新插件源
@@ -27,6 +30,7 @@ if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删�
 	cd $lede_path/feeds/luci/applications           # 进入 LEDE源码内applications目录内；
 	mkdir -p app && mv -f ./* app                   # 临时创建app文件夹，移动当前全部文件到app目录内，后续会删除；
 	
+	# 移动保留的插件； mv -f app/插件名称 ./
 	mv -f app/luci-app-samba4 ./                    # 网络共享（必备插件）
 	mv -f app/luci-app-firewall ./                  # 防火墙（必备插件）
 	
@@ -60,10 +64,29 @@ cd $lede_path
 ./scripts/feeds install -a             ##安装_插件源包
 #---------------------------------------------------------------------------------------------------------------------------------------
 
-git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/otherapp/luci-app-argon-config                 ##Argon主题设置
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  package/otherapp/luci-theme-argon                          ##Argon主题；匹配Lede源码
+
+
+# 下载第三方插件和主题
 
 
 
+# 升级 Go版本
+rm -rf feeds/packages/lang/golang && git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
 
+git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp                                                    ## 下载自己整理的源码
+
+
+#git clone https://github.com/thinktip/luci-theme-neobird.git package/otherapp/luci-theme-neobird                 ##主题
+
+# git clone https://github.com/fangli/openwrt-vm-tools package/otherapp/open-vm-tools                                              ##open-vm-tools 工具；（Utilities--->>open-vm-tools   选择设置为 M 模块化功能）
+# https://github.com/vernesong/OpenClash
+#git clone  https://github.com/bigbugcc/OpenwrtApp package/otherapp/OpenwrtApp           ##作者的插件包
+# vssr科学上网
+#git clone https://github.com/jerrykuku/lua-maxminddb.git package/otherapp/lua-maxminddb
+#git clone https://github.com/jerrykuku/luci-app-vssr.git package/otherapp/luci-app-vssr    ##VSSR科学上网（je大佬插件）
+
+
+# git clone https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk.git package/otherapp/mentohust                                                ##校园网认证
+# git clone -b master  https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git package/otherapp/luci-app-unblockneteasemusic   ##解锁网易云（可以编译但是插件无效）
+# git clone https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic.git package/otherapp/luci-app-unblockneteasemusic              ##解锁网易云(编译后,不显示插件)
 
