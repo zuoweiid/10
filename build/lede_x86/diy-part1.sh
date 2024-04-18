@@ -17,6 +17,7 @@ print_yellow() {                          ## 打印黄色字体
 }
 
 # 第三方插件源码
+sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default # 自己整理的源
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git packag
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  package/otherapp/luci-theme-argon                          ##Argon主题；匹配Lede源码
 
 # git clone https://github.com/zuoweiid/luci-app.git package/otherapp/luci-app                                                     ## 下载自己整理的源码
-git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp/luci-app
+#git clone --depth 1 https://github.com/zuoweiid/luci-app.git package/otherapp/luci-app
 
 # 升级 Go版本
 rm -rf feeds/packages/lang/golang && git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
