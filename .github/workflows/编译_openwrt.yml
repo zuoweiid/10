@@ -341,10 +341,10 @@ jobs:
         
         cd openwrt                             # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
-        # echo -e "$(($(nproc)+1)) thread compile"            # 显示当前几线程编译
-        # make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s  # 修改前的代码
+        echo -e "$(($(nproc)+1)) thread compile"            # 显示当前几线程编译
+        make -j$(($(nproc)+1)) || make -j1 || make -j1 V=s  # 修改前的代码
         
-        make -j1 V=s                                          # 修改的代码，测试中
+        # make -j1 V=s                                          # 修改的代码，测试中
         
         # echo "::set-output name=status::success"         # 已经弃用
         echo "status=success" >>$GITHUB_OUTPUT             # 新代码

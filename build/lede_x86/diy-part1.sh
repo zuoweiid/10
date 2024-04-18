@@ -17,7 +17,14 @@ print_yellow() {                          ## 打印黄色字体
 }
 
 # 第三方插件源码
-sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default # 自己整理的源
+sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                         # 显示“helloworld”项目插件；含ssr-plus
+# sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加“helloworld”项目插件；含ssr-plus
+
+# sed -i '$a src-git kenzok https://github.com/kenzok8/openwrt-packages' feeds.conf.default    # 常用插件源
+# sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default                # 常用插件源_依赖安装
+# sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default      # PPTP VPN 服务器等。。。
+# sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default    # 适合一键下载编译（smpackage目录）
+# sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default          # 自己整理的源
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------
