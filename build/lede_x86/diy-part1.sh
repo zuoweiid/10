@@ -45,6 +45,7 @@ cd $lede_path   #---删除 LEDE源码内 luci/applications 自带插件
 if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删除以下文件
 	print_error "***删除冲突插件*** 路径：feeds/luci/applications "
 	cd $lede_path/feeds/luci/applications           # 进入 LEDE源码内applications目录内；
+#---------------------------------------------------------------------------------------------------------------------------------------
 	mkdir -p app && mv -f ./* app                   # 临时创建app文件夹，移动当前全部文件到app目录内，后续会删除；
 	
 	# 移动保留的插件； mv -f app/插件名称 ./
@@ -63,6 +64,12 @@ if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删�
 	mv -f app/luci-app-zerotier ./					# ZeroTier内网穿透（常用）
 	
 	rm -rf app                                      # 删除临时创建的app目录；
+#---------------------------------------------------------------------------------------------------------------------------------------
+	rm -rf luci-app-argon-config         # 删除luci-app-argon-config主题设置
+	# rm -rf luci-app-unblockmusic       # 此插件包目前有效果，勿删除！！！（网易云解锁）
+	rm -rf luci-app-serverchan           # 删除ServerChan微信推送
+	rm -rf luci-app-pushbot              # 删除PushBot 全能推送
+	
 	cd $lede_path/feeds/luci/themes      # 进入themes主题目录
 
 	rm -rf luci-theme-argon              # 删除Argon主题（旧版必删）
