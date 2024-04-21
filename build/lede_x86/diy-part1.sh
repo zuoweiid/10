@@ -1,6 +1,5 @@
 #!/bin/bash
-lede_path=$(pwd)
-# lede_path="${PWD}"                        ##目录变量=Lede源码目录；
+lede_path=$(pwd)                            ##目录变量=Lede源码目录；
 # lede_path="$(cd `dirname $0`; pwd)"       ##目录变量=Lede源码目录；
 cd $lede_path
 
