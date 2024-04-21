@@ -23,7 +23,7 @@ print_yellow() {                          ## 打印黄色字体
 # sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加源 “helloworld”项目插件；含ssr-plus
 
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default    # 整合插件源码（常用！）       $a= 插入最后一行， $i= 插入倒数第二行
-# sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default          # 自己整理的源
+sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default          # 自己整理的源
 # echo 'src-git kenzok https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default	 # 插件源码
 # echo 'src-git lienol https://github.com/Lienol/openwrt-package' >>feeds.conf.default		 # 插件源码
 # echo 'src-git 281677160 https://github.com/281677160/openwrt-package' >>feeds.conf.default # 插件源码
