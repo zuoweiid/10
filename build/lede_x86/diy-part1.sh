@@ -1,8 +1,9 @@
 #!/bin/bash
-# lede_path="${PWD}"                      ##目录变量=Lede源码目录；
 lede_path=$(pwd)
+# lede_path="${PWD}"                        ##目录变量=Lede源码目录；
 # lede_path="$(cd `dirname $0`; pwd)"       ##目录变量=Lede源码目录；
 cd $lede_path
+
 
 # 字体颜色配置
 print_error() {                           ## 打印红色字体
@@ -19,8 +20,8 @@ print_yellow() {                          ## 打印黄色字体
 
 
 # 第三方插件源码
-# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                         # 显示“helloworld”项目插件；含ssr-plus
-# sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加“helloworld”项目插件；含ssr-plus
+# sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                         # 显示源 “helloworld”项目插件；含ssr-plus
+# sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加源 “helloworld”项目插件；含ssr-plus
 
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default    # 整合插件源码（常用！）       $a= 插入最后一行， $i= 插入倒数第二行
 # sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default          # 自己整理的源
@@ -28,7 +29,6 @@ print_yellow() {                          ## 打印黄色字体
 # echo 'src-git lienol https://github.com/Lienol/openwrt-package' >>feeds.conf.default		 # 插件源码
 # echo 'src-git 281677160 https://github.com/281677160/openwrt-package' >>feeds.conf.default # 插件源码
 # echo 'src-git small https://github.com/kenzok8/small' >>feeds.conf.default				 # 保留：luci-app-bypass  luci-app-mosdns  luci-app-passwall  luci-app-passwall2  luci-app-ssr-plus（新版本：passwall  passwall 2   SSR_Plus）
-
 
 
 
