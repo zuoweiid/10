@@ -36,6 +36,8 @@ print_yellow() {                          ## 打印黄色字体
 ./scripts/feeds update -a          											  # 更新_插件源包（更新后目录：lede源码/feeds/***）
 #---------------------------------------------------------------------------------------------------------------------------------------
 
+
+
 cd $lede_path   #---删除 LEDE源码内 luci/applications 自带插件
 if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删除以下文件
 	print_error "***删除冲突插件*** 路径：feeds/luci/applications "
@@ -79,14 +81,18 @@ else
 fi
 	
 
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 cd $lede_path
 ./scripts/feeds install -a             ##安装_插件源包
 #---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 # 最新版插件和主题
 rm -rf feeds/packages/lang/golang && git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang  ## 升级 Go版本
 
-git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/otherapp/luci-app-argon-config                 ##Argon主题设置
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  package/otherapp/luci-theme-argon                          ##Argon主题；匹配Lede源码
+git clone -b 18.06 https://github.com/jerrykuku/luci-app-argon-config.git package/otherapp/luci-app-argon-config                 ## Argon主题设置
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git  package/otherapp/luci-theme-argon                          ## Argon主题；匹配Lede源码
 
 

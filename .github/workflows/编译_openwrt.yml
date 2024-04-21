@@ -339,7 +339,7 @@ jobs:
       run: |
         pwd && ls                                # 显示当前步骤的路径和所有文件和文件夹；
         
-        cd openwrt                             # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
+        cd openwrt                               # 因为执行工作目录在上级“workdir”，每一步必须进入openwrt源码目录
         
         # 修改前代码
         # echo -e "$(($(nproc)+1)) thread compile"                   # 显示当前CPU多少线程
