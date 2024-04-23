@@ -19,10 +19,10 @@ print_yellow() {                          ## 打印黄色字体
 
 print_yellow "正在执行package.sh脚本......"
 # 显示 插件源链接
-#echo "***源码自带_基础核心（src-git packages https://github.com/coolsnowwolf/packages   ）***"    # 基础核心
-#echo "***源码自带_luci插件（src-git luci https://github.com/coolsnowwolf/luci           ）***"    # luci插件（常用基础）
-#echo "***源码自带_路由核心（src-git routing https://github.com/coolsnowwolf/routing     ）***"    # 路由核心
-#echo "***源码自带_通信核心（src-git telephony https://git.openwrt.org/feed/telephony.git）***"    # 通信核心
+echo "***源码自带_基础核心（src-git packages https://github.com/coolsnowwolf/packages   ）***"    # 基础核心
+echo "***源码自带_luci插件（src-git luci https://github.com/coolsnowwolf/luci           ）***"    # luci插件（常用基础）
+echo "***源码自带_路由核心（src-git routing https://github.com/coolsnowwolf/routing     ）***"    # 路由核心
+echo "***源码自带_通信核心（src-git telephony https://git.openwrt.org/feed/telephony.git）***"    # 通信核心
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default                                            # 取消注释源-（显示插件 luci-app-ssr-plus）
 
 
