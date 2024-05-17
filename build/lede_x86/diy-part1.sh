@@ -23,7 +23,7 @@ print_yellow() {                          ## 打印黄色字体
 # sed -i '$i '"src-git helloworld https://github.com/fw876/helloworld"'' feeds.conf.default    # 添加源 “helloworld”项目插件；含ssr-plus
 
 # sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default    # 整合插件源码（常用！）       $a= 插入最后一行， $i= 插入倒数第二行
-sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default          # 自己整理的源
+sed -i '$a src-git luciapp https://github.com/zuoweiid/luci-app' feeds.conf.default            # 自己整理的源       $a= 插入最后一行， $i= 插入倒数第二行
 # echo 'src-git kenzok https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default	 # 插件源码
 # echo 'src-git lienol https://github.com/Lienol/openwrt-package' >>feeds.conf.default		 # 插件源码
 # echo 'src-git 281677160 https://github.com/281677160/openwrt-package' >>feeds.conf.default # 插件源码
@@ -49,24 +49,15 @@ if [ -d "$lede_path/feeds/luci/applications" ]; then   # 如果存在，就删�
 	mv -f app/luci-app-samba4 ./                    # 网络共享（必备插件）
 	mv -f app/luci-app-firewall ./                  # 防火墙（必备插件）
 	
-	mv -f app/luci-app-autoreboot ./				# 计划定时重启（autopoweroff二选一）（常用）
-	mv -f app/luci-app-ddns ./						# 动态DNS（集成阿里DDNS客户端）（常用）
-	mv -f app/luci-app-filetransfer ./				# 文件传输（可web安装ipk包）（常用）
-	mv -f app/luci-app-netdata ./					# Netdata实时监控（CPU详情图表）
-	mv -f app/luci-app-nlbwmon ./					# 带宽监控（显示、配置、备份）（常用）
+	mv -f app/luci-app-filetransfer ./				# 安装ipk软件包（文件传输）（常用）
 	mv -f app/luci-app-ttyd ./						# 网页终端命令行（常用）
-	mv -f app/luci-app-unblockmusic ./				# 网易云解锁插件，目前有效 勿删除！！！（常用）
+	mv -f app/luci-app-turboacc ./   				# TurboACC网络加速
 	mv -f app/luci-app-vlmcsd ./					# KMS服务器设置（常用）
 	mv -f app/luci-app-webadmin ./					# Web管理页面设置；修改80默认端口（常用）
+	mv -f app/luci-app-wol ./						# WOL网络唤醒
 	mv -f app/luci-app-zerotier ./					# ZeroTier内网穿透（常用）
-	
 	rm -rf app                                      # 删除临时创建的app目录；
-#---------------------------------------------------------------------------------------------------------------------------------------
-	# 删除项目
-	# rm -rf luci-app-argon-config         # 删除luci-app-argon-config主题设置
-	# # rm -rf luci-app-unblockmusic       # 此插件包目前有效果，勿删除！！！（网易云解锁）
-	# rm -rf luci-app-serverchan           # 删除ServerChan微信推送
-	# rm -rf luci-app-pushbot              # 删除PushBot 全能推送
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 	cd $lede_path/feeds/luci/themes      # 进入themes主题目录
 
