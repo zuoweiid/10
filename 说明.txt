@@ -1,0 +1,81 @@
+一、先在 Github创建“luci-app”同步插件的仓库目录；
+二、然后本地电脑创建“luci-app”同步插件的仓库目录；
+# git init                                                                                          ## 初始化本地仓库
+# git remote add origin git@github.com:zuoweiid/luci-app.git        ## 与 Github 仓库建立远程链接
+（新创建 README.md 文件放在luci-app目录内；提交一次源码，推送一次源码）
+
+
+三、先在 Github创建“20-Syn”同步脚本的仓库目录；
+四、然后本地电脑创建“20-Syn”同步脚本的仓库目录；
+# git init                                                                                          ## 初始化本地仓库
+# git branch -M main                                                                      ## 修改默认分支为 main
+# git remote add origin git@github.com:zuoweiid/20-Syn.git          ## 与 Github 仓库建立远程链接
+（复制同步源码，放在“20-Syn”目录内；提交一次源码，推送一次源码）
+Github仓库绑定 变量令牌值：仓库的设置页面--->>左侧 Actions--->>右侧 创建 Secrets 变量--->>：ACCESS_TOKEN------已生成的令牌值 
+
+修改openwrt-packages.yml工作流 ：
+克隆 软件包仓库地址 ：https://github.com/zuoweiid/luci-app.git
+提交 软件包仓库地址 ：git push --quiet "https://${{ secrets.ACCESS_TOKEN }}@github.com/zuoweiid/luci-app.git" HEAD:${{matrix.target}}
+
+
+
+
+https://github.com/coolsnowwolf/lede/issues/11757
+svn_export() {
+	# 参数1是分支名, 参数2是子目录, 参数3是目标目录, 参数4仓库地址
+	trap 'rm -rf "$TMP_DIR"' 0 1 2 3
+	TMP_DIR="$(mktemp -d)" || exit 1
+	[ -d "$3" ] || mkdir -p "$3"
+	TGT_DIR="$(cd "$3"; pwd)"
+	cd "$TMP_DIR" && \
+	git init >/dev/null 2>&1 && \
+	git remote add -f origin "$4" >/dev/null 2>&1 && \
+	git checkout "remotes/origin/$1" -- "$2" && \
+	cd "$2" && cp -a . "$TGT_DIR/"
+}
+
+svn_export "master" "target/linux/x86" "route" "https://github.com/coolsnowwolf/lede"
+
+
+
+
+
+
+function merge_package(){
+    # 参数1是分支名,参数2是库地址。所有文件下载到openwrt/package/openwrt-packages路径。
+    # 同一个仓库下载多个文件夹直接在后面跟文件名或路径，空格分开。
+    trap 'rm -rf "$tmpdir"' EXIT
+    branch="$1" curl="$2" && shift 2
+    rootdir="$PWD"
+    localdir=package/openwrt-packages
+    [ -d "$localdir" ] || mkdir -p "$localdir"
+    tmpdir="$(mktemp -d)" || exit 1
+    git clone -b "$branch" --depth 1 --filter=blob:none --sparse "$curl" "$tmpdir"
+    cd "$tmpdir"
+    git sparse-checkout init --cone
+    git sparse-checkout set "$@"
+    mv -f "$@" "$rootdir"/"$localdir" && cd "$rootdir"
+}
+merge_package master https://github.com/WYC-2020/openwrt-packages luci-app-eqos luci-app-openclash luci-app-ddnsto ddnsto 
+merge_package master https://github.com/lisaac/luci-app-dockerman applications/luci-app-dockerman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
